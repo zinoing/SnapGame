@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SnapGame Platform</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-container {
+      width: 400px;
+      height: 600px;
+      margin: 20px 0;
+      background-color: #000;
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .swipe-zone {
+      position: fixed;
+      left: 0;
+      width: 100vw;
+      height: 80px;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    #swipe-top {
+      top: 0;
+    }
+
+    #swipe-bottom {
+      bottom: 0;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: white;
+      opacity: 0.4;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="coin-display">🪙 Coins: 0</div>
+  <style>
+    #coin-display {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      z-index: 9999;
+      opacity: 0.9;
+    }
+  </style>
+
+  <div id="feed"></div>
+  <div id="swipe-top" class="swipe-zone">
+    <div class="arrow">⬇️</div>
+  </div>
+  <div id="swipe-bottom" class="swipe-zone">
+    <div class="arrow">⬆️</div>
+  </div>
+
+  <script src="games/shared/finish-ui.js"></script>
+  <script src="games/list/game-list.js"></script>
+
+  <script>
+    const gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
+
+    for (let i = gameOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [gameOrder[i], gameOrder[j]] = [gameOrder[j], gameOrder[i]];
+    }
+
+    let currentIndex = 0;
+
+    function loadNextGame() {
+      const gameIndex = gameOrder[currentIndex];
+      currentIndex = (currentIndex + 1) % gameOrder.length;
+      loadGame(gameIndex, 0); 
+    }
+
+    function loadPreviousGame() {
+      const gameIndex = gameOrder[currentIndex];
+      currentIndex = (currentIndex - 1 + gameOrder.length) % gameOrder.length;
+      loadGame(gameIndex, 0);
+    }
+  </script>
+  <script>
+
+    let currentGameIndex = 0;
+    let currentLevelIndex = 0;
+    const userId = "test123";
+
+    const feed = document.getElementById("feed");
+
+    function loadGame(gameIndex, levelIndex) {
+      const game = gameList[gameIndex];
+      const levelUrl = game.levels[levelIndex];
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "game-container";
+
+      const iframe = document.createElement("iframe");
+      iframe.src = levelUrl;
+      wrapper.appendChild(iframe);
+
+      feed.innerHTML = "";
+      feed.appendChild(wrapper);
+
+      currentGameIndex = gameIndex;
+      currentLevelIndex = levelIndex;
+    }
+
+    async function loadUserCoins() {
+      try {
+        const res = await fetch(`http://10.0.2.2:3000/api/user/${userId}`);
+        const data = await res.json();
+        const coin = data.coin ?? 0;
+
+        document.getElementById("coin-display").textContent = `🪙 Coins: ${coin}`;
+      } catch (err) {
+        console.error("Failed to load coins", err);
+      }
+    }
+
+    window.addEventListener("message", (event) => {
+      const { type, score, currentLevel } = event.data;
+      if (type === "game_result") {
+        alert("🎉 You scored " + score + " points!");
+        loadNextGame();
+      }
+
+      if (type === "double") {
+        const game = gameList[currentGameIndex];
+        if (currentLevelIndex + 1 < game.levels.length) {
+          loadGame(currentGameIndex, currentLevelIndex + 1);
+        }
+      }
+
+      if (type === "clear") {
+        alert("🎉 You cleared the final level!");
+        window.postMessage({ type: "game_result", score }, "*");
+      }
+    });
+
+    loadGame(currentGameIndex, 0);
+    loadUserCoins();
+  </script>
+
+  <script>
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    ["swipe-top", "swipe-bottom"].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener("touchstart", (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      el.addEventListener("touchend", (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipeGesture();
+      }, { passive: true });
+    });
+
+    function handleSwipeGesture() {
+      if (touchStartY - touchEndY > 100) {
+        loadNextGame();
+      }
+      else {
+        loadPreviousGame();
+      }
+    }
+  </script>
+</body>
+</html>

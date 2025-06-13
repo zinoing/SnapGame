@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SnapGame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #1a1a1a, #111);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #00e0ff;
+      text-shadow: 0 0 10px #00e0ff55;
+    }
+
+    .button {
+      width: 220px;
+      padding: 15px 20px;
+      margin: 10px;
+      font-size: 1.1em;
+      color: white;
+      background: #222;
+      border: 2px solid #00e0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .button:hover {
+      background: #00e0ff;
+      color: black;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.85em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">🎮 SnapGame</div>
+
+  <button class="button" onclick="startGame()">▶ Start Playing</button>
+  <button class="button" onclick="goToRanking()">🏆 Ranking</button>
+  <button class="button" onclick="goToShop()">🛍 Shop</button>
+  <button class="button" onclick="goToProfile()">👤 Profile</button>
+  <button class="button" onclick="goToSettings()">⚙️ Settings</button>
+
+  <div class="footer">© 2025 SnapGame Inc.</div>
+
+  <script>
+    function startGame() {
+      window.location.href = "game-feed.html";
+    }
+
+    function goToRanking() {
+      alert("Ranking is coming soon!");
+    }
+
+    function goToShop() {
+      alert("Shop is coming soon!");
+    }
+
+    function goToProfile() {
+      alert("Profile page coming soon!");
+    }
+
+    function goToSettings() {
+      alert("Settings page coming soon!");
+    }
+  </script>
+</body>
+</html>
