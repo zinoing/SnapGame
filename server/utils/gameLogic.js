@@ -1,9 +1,9 @@
 const redis = require("../db/redis");
 
 const LEVEL_THRESHOLDS = {
-  1: 50,
-  2: 80,
-  3: 100
+  1: 5,
+  2: 10,
+  3: 15
 };
 
 async function updateGameResult(userId, score, level) {
