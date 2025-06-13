@@ -144,4 +144,12 @@ dist
 # package
 package-lock.json
 
+# mobile-app
+node_modules/
+android/build/
+ios/build/
+*.log
+*.apk
+*.aab
+
 # End of https://www.toptal.com/developers/gitignore/api/node
