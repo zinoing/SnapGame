@@ -85,10 +85,79 @@
     <div class="arrow">⬆️</div>
   </div>
 
-  <script src="games/shared/finish-ui.js"></script>
-  <script src="games/list/game-list.js"></script>
+  <style>
+    button[data-liked] {
+      background: transparent; 
+      border: none;     
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+    
+    .interaction-icons {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+      background-color: transparent;
+    }
 
+    .like-button {
+      align-items: center;
+      justify-content: center;
+      background: transparent;  
+      border: none;             
+      outline: none;        
+      cursor: pointer;         
+      padding: 0;             
+    }
+
+    .fav-button {
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .like-button.liked {
+      color: #00aaff;
+    }
+  </style>
+
+  <script src="shared/finish-ui.js"></script>
+  <script src="shared/interaction-ui.js"></script>
   <script src="config.js"></script>
+
+  <script>
+    const gameList = [
+      {
+        id: "clickbox",
+        name: "Click the Box",
+        levels: [
+          "games/clickbox/level1/index.html",
+          "games/clickbox/level2/index.html",
+          "games/clickbox/level3/index.html"
+        ]
+      },
+      {
+        id: "clickbox2",
+        name: "Click the Box",
+        levels: [
+          "games/clickbox2/level1/index.html",
+          "games/clickbox2/level2/index.html",
+          "games/clickbox2/level3/index.html"
+        ]
+      },
+    ];
+    window.userLikes = [];
+    window.userFavorites = [];
+  </script>
 
   <script>
     const gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
@@ -123,9 +192,18 @@
 
       const wrapper = document.createElement("div");
       wrapper.className = "game-container";
-
+      wrapper.style.position = "relative"
+      
       const iframe = document.createElement("iframe");
       iframe.src = levelUrl;
+
+      const interactionIcons = createInteractionIcons(
+        game.id,
+        userLikes,
+        userFavorites
+      )
+
+      wrapper.appendChild(interactionIcons);
       wrapper.appendChild(iframe);
 
       feed.innerHTML = "";
@@ -210,6 +288,7 @@
     (async () => { await loadUserCoins(); })();	
   </script>
 
+  <!-- swiping -->
   <script>
     let touchStartY = 0;
     let touchEndY = 0;
