@@ -4,6 +4,7 @@ const { updateGameResult } = require("../utils/gameLogic");
 
 router.post("/result", async (req, res) => {
   const { userId, score, currentLevel } = req.body;
+  console.log(userId);
   const result = await updateGameResult(userId, score, currentLevel);
   res.json(result);
 });

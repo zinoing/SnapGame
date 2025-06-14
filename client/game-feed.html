@@ -148,10 +148,29 @@
       }
     }
 
-    window.addEventListener("message", (event) => {
+    window.addEventListener("message", async (event) => {
       const { type, score, currentLevel } = event.data;
-      if (type === "game_result") {
+      if (type === "finish") {
         alert("🎉 You scored " + score + " points!");
+
+        await fetch("http://192.168.123.108:3000/api/game/result", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: "test123",
+            score: score,
+            currentLevel: currentLevel
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("서버 응답:", data);
+        })
+        .catch(err => {
+          console.error("서버 요청 실패:", err);
+        });
+
+        await loadUserCoins();
         loadNextGame();
       }
 
@@ -164,13 +183,15 @@
 
       if (type === "clear") {
         alert("🎉 You cleared the final level!");
-        fetch("http://192.168.123.108:3000/result", {
+        alert("🎉 You scored " + score + " points!");
+
+        await fetch("http://192.168.123.108:3000/api/game/result", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: "user123",
-            score: 100,
-            currentLevel: 5
+            userId: "test123",
+            score: score,
+            currentLevel: currentLevel
           })
         })
         .then(res => res.json())
@@ -180,11 +201,14 @@
         .catch(err => {
           console.error("서버 요청 실패:", err);
         });
+
+        await loadUserCoins();
+        loadNextGame();
       }
     });
 
     loadGame(currentGameIndex, 0);
-    loadUserCoins();
+    (async () => { await loadUserCoins(); })();	
   </script>
 
   <script>

@@ -1,3 +1,5 @@
+const currentLevel = 3;
+
 let score = 10;
 let box;
 let scoreText;
@@ -29,10 +31,10 @@ function create() {
 
     if (score == 15) {
       showDoubleOrFinish(score, () => {
-        window.parent.postMessage({ type: "game_result", score, currentLevel: 1 }, "*");
+        window.parent.postMessage({ type: "finish", score, currentLevel}, "*");
       }, () => {
-        window.parent.postMessage({ type: "double", score, currentLevel: 1 }, "*");
-      }, true);
+        window.parent.postMessage({ type: "double", score, currentLevel}, "*");
+      }, currentLevel, true);
     }
   });
 }

@@ -1,3 +1,5 @@
+const currentLevel = 1;
+
 let score = 0;
 let box;
 let scoreText;
@@ -21,7 +23,7 @@ function create() {
     fill: "#fff"
   });
 
-  box = this.add.rectangle(200, 300, 100, 100, 0x0000ff).setInteractive();
+  box = this.add.rectangle(200, 300, 100, 100, 0xff0000).setInteractive();
 
   box.on("pointerdown", () => {
     score++;
@@ -29,10 +31,10 @@ function create() {
 
     if (score == 5) {
       showDoubleOrFinish(score, () => {
-        window.parent.postMessage({ type: "game_result", score, currentLevel: 1 }, "*");
+        window.parent.postMessage({ type: "finish", score, currentLevel }, "*");
       }, () => {
-        window.parent.postMessage({ type: "double", score, currentLevel: 1 }, "*");
-      }, false);
+        window.parent.postMessage({ type: "double", score, currentLevel }, "*");
+      }, currentLevel, false);
     }
   });
 }
