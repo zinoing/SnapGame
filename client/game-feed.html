@@ -88,6 +88,8 @@
   <script src="games/shared/finish-ui.js"></script>
   <script src="games/list/game-list.js"></script>
 
+  <script src="config.js"></script>
+
   <script>
     const gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
 
@@ -138,7 +140,7 @@
 
     async function loadUserCoins() {
       try {
-        const res = await fetch(`http://192.168.123.108:3000/api/user/${userId}`);
+        const res = await fetch(`${SERVER_CONFIG.BASE_URL}/api/user/${userId}`);
         const data = await res.json();
         const coins = data.coins ?? 0;
 
@@ -153,7 +155,7 @@
       if (type === "finish") {
         alert("🎉 You scored " + score + " points!");
 
-        await fetch("http://192.168.123.108:3000/api/game/result", {
+        await fetch(`${SERVER_CONFIG.BASE_URL}/api/game/result`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -185,7 +187,7 @@
         alert("🎉 You cleared the final level!");
         alert("🎉 You scored " + score + " points!");
 
-        await fetch("http://192.168.123.108:3000/api/game/result", {
+        await fetch(`${SERVER_CONFIG.BASE_URL}/api/game/result`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

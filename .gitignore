@@ -152,4 +152,7 @@ ios/build/
 *.apk
 *.aab
 
+# server ip and port
+config.js
+
 # End of https://www.toptal.com/developers/gitignore/api/node
