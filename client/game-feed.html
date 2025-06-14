@@ -138,11 +138,11 @@
 
     async function loadUserCoins() {
       try {
-        const res = await fetch(`http://10.0.2.2:3000/api/user/${userId}`);
+        const res = await fetch(`http://192.168.123.108:3000/api/user/${userId}`);
         const data = await res.json();
-        const coin = data.coin ?? 0;
+        const coins = data.coins ?? 0;
 
-        document.getElementById("coin-display").textContent = `🪙 Coins: ${coin}`;
+        document.getElementById("coin-display").textContent = `🪙 Coins: ${coins}`;
       } catch (err) {
         console.error("Failed to load coins", err);
       }
@@ -164,7 +164,22 @@
 
       if (type === "clear") {
         alert("🎉 You cleared the final level!");
-        window.postMessage({ type: "game_result", score }, "*");
+        fetch("http://192.168.123.108:3000/result", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: "user123",
+            score: 100,
+            currentLevel: 5
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("서버 응답:", data);
+        })
+        .catch(err => {
+          console.error("서버 요청 실패:", err);
+        });
       }
     });
 
