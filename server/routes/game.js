@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { updateGameResult } = require("../utils/gameLogic");
 
-router.post("/result", async (req, res) => {
-  const { userId, score, currentLevel } = req.body;
-  console.log(userId);
-  const result = await updateGameResult(userId, score, currentLevel);
-  res.json(result);
-});
+const gameController = require("../controllers/gameController");
+
+router.post("/", gameController.createGame);
+router.post("/result", gameController.submitGameResult);
+router.get("/:id", gameController.getGame);
+router.get("/", gameController.getTopGames);
 
 module.exports = router;

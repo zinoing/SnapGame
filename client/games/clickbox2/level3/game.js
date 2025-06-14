@@ -23,7 +23,7 @@ function create() {
     fill: "#fff"
   });
 
-  box = this.add.rectangle(200, 300, 100, 100, 0xff0000).setInteractive();
+  box = this.add.rectangle(200, 300, 100, 100, 0x0000CD).setInteractive();
 
   box.on("pointerdown", () => {
     score++;

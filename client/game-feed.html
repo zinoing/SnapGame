@@ -101,15 +101,13 @@
     let currentIndex = 0;
 
     function loadNextGame() {
-      const gameIndex = gameOrder[currentIndex];
       currentIndex = (currentIndex + 1) % gameOrder.length;
-      loadGame(gameIndex, 0); 
+      loadGame(currentIndex, 0); 
     }
 
     function loadPreviousGame() {
-      const gameIndex = gameOrder[currentIndex];
       currentIndex = (currentIndex - 1 + gameOrder.length) % gameOrder.length;
-      loadGame(gameIndex, 0);
+      loadGame(currentIndex, 0);
     }
   </script>
   <script>
@@ -139,7 +137,7 @@
 
     async function loadUserCoins() {
       try {
-        const res = await fetch(`${SERVER_CONFIG.BASE_URL}/api/user/${window.USER_ID.BASE_ID}`);
+        const res = await fetch(`${SERVER_CONFIG.BASE_URL}/api/user/${window.USER_ID.BASE_ID}/coins`);
         const data = await res.json();
         const coins = data.coins ?? 0;
 

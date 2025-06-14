@@ -1,6 +1,7 @@
 function showDoubleOrFinish(score, onFinish, onDouble, currentLevel, isLastLevel) {
   if (isLastLevel) {
     window.parent.postMessage({ type: "clear", score, currentLevel }, "*");
+    return;
   }
 
   const existing = document.getElementById("double-or-finish-ui");
