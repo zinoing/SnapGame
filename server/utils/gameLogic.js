@@ -1,4 +1,4 @@
-const redis = require("../db/redis");
+const redis = require("../db/redis/redis");
 const userService = require("../utils/services/userService");
 
 const LEVEL_THRESHOLDS = { 1: 5, 2: 10, 3: 15 };

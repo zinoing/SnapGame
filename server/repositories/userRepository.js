@@ -1,5 +1,6 @@
 const db = require("../db/mysql");
-const redis = require("../db/redis");
+const { hGet, hSet } = require("../db/redis/redisUtils");
+const { userKey } = require("../db/redis/redisKeys");
 
 exports.createUser = async ({ userId, nickname, passwordHash = null }) => {
   const sql = `
@@ -8,7 +9,7 @@ exports.createUser = async ({ userId, nickname, passwordHash = null }) => {
   `;
   await db.execute(sql, [userId, nickname, passwordHash]);
 
-  await redis.hSet(userKey(userId), {
+  await hSet(userKey(userId), {
     coins: 0,
     currentLevel: 1
   });
@@ -57,13 +58,13 @@ exports.updateUserStats = async (userId, stats) => {
 
 exports.getUserCoins = async (userId) => {
   const key = userKey(userId);
-  let coins = await redis.hGet(key, "coins");
+  let coins = await hGet(key, "coins");
 
   if (coins === null) {
     const sql = `SELECT coins FROM users WHERE user_id = ?`;
     const [rows] = await db.execute(sql, [userId]);
     coins = rows.length > 0 ? rows[0].coins : 0;
-    await redis.hSet(key, "coins", coins.toString());
+    await hSet(key, "coins", coins.toString());
   }
 
   return parseInt(coins, 10);
@@ -72,5 +73,5 @@ exports.getUserCoins = async (userId) => {
 exports.setUserCoins = async (userId, coins) => {
   const sql = `UPDATE users SET coins = ? WHERE user_id = ?`;
   await db.execute(sql, [coins, userId]);
-  await redis.hSet(userKey(userId), "coins", coins.toString());
+  await hSet(userKey(userId), "coins", coins.toString());
 };

@@ -1,5 +1,5 @@
 const db = require("../db/mysql");
-const redis = require("../db/redis");
+const redis = require("../db/redis/redis");
 
 exports.createLevel = async (gameId, levelIndex) => {
   const sql = `INSERT INTO levels (game_id, level_index) VALUES (?, ?)`;

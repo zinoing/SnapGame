@@ -1,5 +1,5 @@
 const db = require("../db/mysql");
-const redis = require("../db/redis");
+const redis = require("../db/redis/redis");
 
 exports.upsertStats = async (userId, gameId, score, cleared) => {
   const updateSql = `
