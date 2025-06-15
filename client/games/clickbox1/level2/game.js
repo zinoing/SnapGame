@@ -1,6 +1,7 @@
-const currentLevel = 3;
+const currentLevel = 2;
+const GAME_ID = window.GAME_CONFIG.GAME_ID;
 
-let score = 10;
+let score = 5;
 let box;
 let scoreText;
 
@@ -29,12 +30,12 @@ function create() {
     score++;
     scoreText.setText("Score: " + score);
 
-    if (score == 15) {
+    if (score == 10) {
       showDoubleOrFinish(score, () => {
-        window.parent.postMessage({ type: "finish", score, currentLevel}, "*");
+        window.parent.postMessage({ type: "finish", score:score, level: currentLevel, gameId: GAME_ID}, "*");
       }, () => {
-        window.parent.postMessage({ type: "double", score, currentLevel}, "*");
-      }, currentLevel, true);
+        window.parent.postMessage({ type: "double", score:score, level: currentLevel, gameId: GAME_ID}, "*");
+      }, currentLevel, false);
     }
   });
 }

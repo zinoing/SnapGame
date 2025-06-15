@@ -45,7 +45,8 @@ exports.getUserCoins = async (req, res) => {
 };
 
 exports.saveUserCoins = async (req, res) => {
-  const { userId, coins } = req.body;
+  const userId = req.params.id;
+  const { coins } = req.body;
 
   if (!userId || coins === undefined) {
     return res.status(400).json({ error: "Missing userId or coins" });

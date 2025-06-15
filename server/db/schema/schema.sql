@@ -25,6 +25,8 @@ CREATE TABLE games (
   game_id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   level_count INT NOT NULL,
+  play_cost INT NOT NULL,
+  base_reward INT NOT NULL,
   genre_tags JSON, -- e.g. ["reflex", "timing"]
   total_play_count INT DEFAULT 0,
   avg_clear_rate FLOAT DEFAULT 0,
@@ -47,7 +49,7 @@ CREATE TABLE levels (
 
 CREATE TABLE game_likes (
   user_id VARCHAR(50),
-  game_id INT,
+  game_id VARCHAR(50),
   liked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id, game_id),
   FOREIGN KEY (user_id) REFERENCES users(user_id),
@@ -56,7 +58,7 @@ CREATE TABLE game_likes (
 
 CREATE TABLE game_favorites (
   user_id VARCHAR(50),
-  game_id INT,
+  game_id VARCHAR(50),
   favorited_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id, game_id),
   FOREIGN KEY (user_id) REFERENCES users(user_id),

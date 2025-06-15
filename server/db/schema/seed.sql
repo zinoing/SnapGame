@@ -1,4 +1,4 @@
-INSERT INTO users (
+INSERT IGNORE INTO users (
   user_id,
   password_hash,
   nickname,
@@ -26,3 +26,49 @@ VALUES (
 )
 ON DUPLICATE KEY UPDATE
   coins = 300;
+
+INSERT IGNORE INTO games (
+  game_id,
+  name,
+  level_count,
+  play_cost,
+  base_reward,
+  genre_tags,
+  total_play_count,
+  avg_clear_rate,
+  avg_play_time
+)
+VALUES (
+  'clickbox1',
+  'clickbox1',
+  3,
+  10,
+  20,
+  NULL,
+  0,
+  0,
+  0
+);
+
+INSERT IGNORE INTO games (
+  game_id,
+  name,
+  level_count,
+  play_cost,
+  base_reward,
+  genre_tags,
+  total_play_count,
+  avg_clear_rate,
+  avg_play_time
+)
+VALUES (
+  'clickbox2',
+  'clickbox2',
+  3,
+  20,
+  30,
+  NULL,
+  0,
+  0,
+  0
+);

@@ -24,3 +24,9 @@ exports.getTopGames = async (limit = 10) => {
   const [rows] = await db.execute(sql, [limit]);
   return rows;
 };
+
+exports.getBaseReward = async (gameId) => {
+  const sql = `SELECT base_reward FROM games WHERE game_id = ?`;
+  const [rows] = await db.execute(sql, [gameId]);
+  return rows[0]?.base_reward ?? 0;
+};

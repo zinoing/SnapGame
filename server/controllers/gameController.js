@@ -42,11 +42,11 @@ exports.getTopGames = async (req, res) => {
 };
 
 exports.submitGameResult = async (req, res) => {
-  const { userId, score, currentLevel } = req.body;
+  const { userId, level, gameId } = req.body;
   console.log("Game result for user:", userId);
 
   try {
-    const result = await updateGameResult(userId, score, currentLevel);
+    const result = await updateGameResult(userId, level, gameId);
     res.json(result);
   } catch (err) {
     console.error("Error updating game result:", err);

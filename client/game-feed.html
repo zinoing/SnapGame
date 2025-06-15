@@ -6,18 +6,20 @@
   <style>
     body {
       margin: 0;
+      height: 100vh;
       background-color: #111;
       color: white;
       font-family: sans-serif;
+
       display: flex;
       flex-direction: column;
-      align-items: center;
+      justify-content: center; /* 수직 중앙 정렬 */
+      align-items: center;      /* 수평 중앙 정렬 */
     }
 
     .game-container {
       width: 400px;
       height: 600px;
-      margin: 20px 0;
       background-color: #000;
       position: relative;
     }
@@ -85,6 +87,7 @@
     <div class="arrow">⬆️</div>
   </div>
 
+  <!-- like and fav buttons -->
   <style>
     button[data-liked] {
       background: transparent; 
@@ -134,21 +137,24 @@
   <script src="shared/interaction-ui.js"></script>
   <script src="config.js"></script>
 
+  <!-- gameList -->
   <script>
     const gameList = [
       {
-        id: "clickbox",
+        id: "clickbox1",
         name: "Click the Box",
         levels: [
-          "games/clickbox/level1/index.html",
-          "games/clickbox/level2/index.html",
-          "games/clickbox/level3/index.html"
+          "games/clickbox1/intro/intro.html",
+          "games/clickbox1/level1/index.html",
+          "games/clickbox1/level2/index.html",
+          "games/clickbox1/level3/index.html"
         ]
       },
       {
         id: "clickbox2",
         name: "Click the Box",
         levels: [
+          "games/clickbox2/intro/intro.html",
           "games/clickbox2/level1/index.html",
           "games/clickbox2/level2/index.html",
           "games/clickbox2/level3/index.html"
@@ -179,8 +185,8 @@
       loadGame(currentIndex, 0);
     }
   </script>
-  <script>
 
+  <script>
     let currentGameIndex = 0;
     let currentLevelIndex = 0;
 
@@ -195,7 +201,13 @@
       wrapper.style.position = "relative"
       
       const iframe = document.createElement("iframe");
-      iframe.src = levelUrl;
+      iframe.src = `./${levelUrl}`;
+
+      if (levelIndex === 0) {
+        iframe.src = `/games/${game.id}/intro/intro.html`;
+      } else {
+        iframe.src = game.levels[levelIndex];
+      }
 
       const interactionIcons = createInteractionIcons(
         game.id,
@@ -226,7 +238,18 @@
     }
 
     window.addEventListener("message", async (event) => {
-      const { type, score, currentLevel } = event.data;
+      const { type, score, level, gameId } = event.data;
+      if(type === "play") {
+        await loadUserCoins();
+        loadGame(currentGameIndex, level + 1);
+      }
+
+      if(type == "fail") {
+        alert("You failed");
+        // 처음으로 되돌아가기 혹은 광고 보고 리플레이 가능
+        loadGame(currentGameIndex, 0);
+      }
+
       if (type === "finish") {
         alert("🎉 You scored " + score + " points!");
 
@@ -235,8 +258,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: window.USER_ID.BASE_ID,
-            score: score,
-            currentLevel: currentLevel
+            level: level,
+            gameId: gameId
           })
         })
         .then(res => res.json())
@@ -254,7 +277,7 @@
       if (type === "double") {
         const game = gameList[currentGameIndex];
         if (currentLevelIndex + 1 < game.levels.length) {
-          loadGame(currentGameIndex, currentLevelIndex + 1);
+          loadGame(currentGameIndex, level + 1);
         }
       }
 
@@ -267,8 +290,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: window.USER_ID.BASE_ID,
-            score: score,
-            currentLevel: currentLevel
+            level: level,
+            gameId: gameId
           })
         })
         .then(res => res.json())
