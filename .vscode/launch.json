@@ -6,15 +6,20 @@
     "configurations": [
 
         {
-        "version": "0.2.0",
-        "configurations": [
-            {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\server\\index.js"
+        },
+        {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Client in Chrome",
-            "file": "${workspaceFolder}/client/index.html"
-            }
-        ]
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000/index.html",
+            "webRoot": "${workspaceFolder}\\client"
         }
-  ]
+    ]
 }

@@ -1,0 +1,17 @@
+const API_BASE = "/api/user";
+
+export async function getUserCoins(userId) {
+  const res = await fetch(`${API_BASE}/${userId}/coins`);
+  const data = await res.json();
+  return data.coins; 
+}
+
+export async function updateUserCoins(userId, coinData) {
+  console.log("Sending coin update request", userId, coinData); // 👈 이거 찍히는지 확인
+  const res = await fetch(`${API_BASE}/${userId}/coins`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(coinData),
+  });
+  return res.json();
+}

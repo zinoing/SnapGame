@@ -1,4 +1,4 @@
-function createInteractionIcons(gameId, userLikes = [], userFavorites = []) {
+export function createInteractionIcons(gameId, userLikes = [], userFavorites = []) {
   const container = document.createElement("div");
   container.style.position = "absolute";
   container.style.top = "50%";
@@ -9,6 +9,7 @@ function createInteractionIcons(gameId, userLikes = [], userFavorites = []) {
   container.style.gap = "12px";
   container.style.zIndex = "999";
 
+  // like Button
   const likeBtn = document.createElement("button");
   likeBtn.setAttribute("data-liked", "false");
 
@@ -121,4 +122,15 @@ function createInteractionIcons(gameId, userLikes = [], userFavorites = []) {
   container.appendChild(favBtn);
 
   return container;
+}
+
+export function setupInteractionUI(gameId, targetSelector = ".game-container") {
+  const container = document.querySelector(targetSelector);
+  if (!container) {
+    console.warn("No container found for interaction UI");
+    return;
+  }
+
+  const interactionIcons = createInteractionIcons(gameId);
+  container.appendChild(interactionIcons);
 }
