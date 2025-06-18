@@ -7,7 +7,7 @@ import {
   currentGameIndex,
   currentLevelIndex,
   gameList
-} from "../load-game.js";
+} from "../core/load-game.js";
 
 import { getUserCoins, updateUserCoins } from "../api/userApi.js";
 import { getGameInfo } from "../api/gameApi.js";
@@ -35,42 +35,49 @@ async function submitResult(userId, level, gameId) {
 window.addEventListener("message", async (event) => {
     const { type, score, level, gameId } = event.data;
 
-    if(type === "play") {
-    let gameInfo = await getGameInfo(gameId);
-    let coins = await getUserCoins(window.USER_ID.BASE_ID);
-    
-    await updateUserCoins(window.USER_ID.BASE_ID, { coins: coins - gameInfo.play_cost});
-    await updateUserCoinUI();
-    loadGame(currentGameIndex, level + 1);
-    }
-
-    if(type == "fail") {
-    alert("You failed");
-    // 처음으로 되돌아가기 혹은 광고 보고 리플레이 가능
-    loadGame(currentGameIndex, 0);
-    }
-
-    if (type === "finish") {
-    alert("🎉 You scored " + score + " points!");
-
-    await submitResult(window.USER_ID.BASE_ID, level, gameId);
-    await updateUserCoinUI();
-    loadNextGame();
-    }
-
-    if (type === "double") {
-    const game = gameList[currentGameIndex];
-    if (currentLevelIndex + 1 < game.levels.length) {
+    switch(type) {
+      case "play": {
+        let gameInfo = await getGameInfo(gameId);
+        let coins = await getUserCoins(window.USER_ID.BASE_ID);
+        
+        await updateUserCoins(window.USER_ID.BASE_ID, { coins: coins - gameInfo.play_cost});
+        await updateUserCoinUI();
         loadGame(currentGameIndex, level + 1);
-    }
-    }
+        break;
+      }
 
-    if (type === "clear") {
-    alert("🎉 You cleared the final level!");
-    alert("🎉 You scored " + score + " points!");
+      case "fail": {
+        alert("You failed");
+        // 처음으로 되돌아가기 혹은 광고 보고 리플레이 가능
+        loadGame(currentGameIndex, 0);
+        break;
+      }
 
-    await submitResult(window.USER_ID.BASE_ID, level, gameId);
-    await updateUserCoinUI();
-    loadNextGame();
+      case "finish": {
+        alert("🎉 You scored " + score + " points!");
+
+        await submitResult(window.USER_ID.BASE_ID, level, gameId);
+        await updateUserCoinUI();
+        loadNextGame();
+        break;
+      }
+
+      case "double": {
+        const game = gameList[currentGameIndex];
+        if (currentLevelIndex + 1 < game.levels.length) {
+            loadGame(currentGameIndex, level + 1);
+        }
+        break;
+      }
+
+      case "clear": {
+        alert("🎉 You cleared the final level!");
+        alert("🎉 You scored " + score + " points!");
+
+        await submitResult(window.USER_ID.BASE_ID, level, gameId);
+        await updateUserCoinUI();
+        loadGame(currentGameIndex, 0);
+        break;
+      }
     }
 });

@@ -1,7 +1,9 @@
-const currentLevel = 1;
-const GAME_ID = window.GAME_CONFIG.GAME_ID;
+import { getCurrentLevel, getLevelChecker, incrementLevel} from "../level.js";
+import { getScore, incrementScore} from "../score.js";
 
-let score = 0;
+const GAME_ID = window.GAME_CONFIG.GAME_ID;
+const checker = getLevelChecker();
+
 let box;
 let scoreText;
 
@@ -19,23 +21,27 @@ const config = {
 const game = new Phaser.Game(config);
 
 function create() {
-  scoreText = this.add.text(20, 20, "Score: " + score, {
+  scoreText = this.add.text(20, 20, "Score: " + getScore(), {
     fontSize: "24px",
     fill: "#fff"
   });
 
-  box = this.add.rectangle(200, 300, 100, 100, 0x0000CD).setInteractive();
+  box = this.add.rectangle(200, 300, 100, 100, 0xff0000).setInteractive();
 
   box.on("pointerdown", () => {
-    score++;
+    incrementScore();
+    
+    let score = getScore();
     scoreText.setText("Score: " + score);
 
-    if (score == 5) {
+    if (checker.succeed({ score })) {
+      const level = getCurrentLevel();
+      incrementLevel();
       showDoubleOrFinish(score, () => {
-        window.parent.postMessage({ type: "finish", score:score, level: currentLevel, gameId: GAME_ID}, "*");
+        window.parent.postMessage({ type: "finish", score, level: level , gameId: GAME_ID }, "*");
       }, () => {
-        window.parent.postMessage({ type: "double", score:score, level: currentLevel, gameId: GAME_ID}, "*");
-      }, currentLevel, false);
+        window.parent.postMessage({ type: "double", score, level: level , gameId: GAME_ID }, "*");
+      },level , false);
     }
   });
 }

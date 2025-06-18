@@ -1,4 +1,4 @@
-import { loadNextGame, loadPreviousGame } from "../load-game.js";
+import { loadNextGame, loadPreviousGame } from "../core/load-game.js";
 
 let touchStartY = 0;
 let touchEndY = 0;

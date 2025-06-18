@@ -1,4 +1,4 @@
-import { createInteractionIcons } from "./ui/interaction-ui.js";
+import { createInteractionIcons } from "../ui/interaction-ui.js";
 export { currentGameIndex, currentLevelIndex, gameList };
 
 const gameList = [
@@ -47,9 +47,8 @@ export function loadGame(gameIndex, levelIndex) {
   wrapper.style.position = "relative";
 
   const iframe = document.createElement("iframe");
-  iframe.src = `./${levelUrl}`;
-
-  // UI 구성: interaction 버튼 등 (선택)
+  iframe.src = `../${levelUrl}`;
+  
   const interactionIcons = createInteractionIcons(game.id, userLikes, userFavorites);
   wrapper.appendChild(interactionIcons);
 

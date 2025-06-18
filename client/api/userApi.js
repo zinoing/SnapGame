@@ -7,7 +7,7 @@ export async function getUserCoins(userId) {
 }
 
 export async function updateUserCoins(userId, coinData) {
-  console.log("Sending coin update request", userId, coinData); // 👈 이거 찍히는지 확인
+  console.log("Sending coin update request", userId, coinData);
   const res = await fetch(`${API_BASE}/${userId}/coins`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
