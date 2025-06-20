@@ -1,36 +1,27 @@
 import { createInteractionIcons } from "../ui/interaction-ui.js";
-export { currentGameIndex, currentLevelIndex, gameList };
+import { loadGameList, getGameList } from "./gameListLoader.js";
 
-const gameList = [
-  {
-    id: "clickbox1",
-    name: "Click the Box",
-    levels: [
-      "games/clickbox1/intro/intro.html",
-      "games/clickbox1/level1/index.html",
-      "games/clickbox1/level2/index.html",
-      "games/clickbox1/level3/index.html"
-    ]
-  },
-  {
-    id: "clickbox2",
-    name: "Click the Box",
-    levels: [
-      "games/clickbox2/intro/intro.html",
-      "games/clickbox2/level1/index.html",
-      "games/clickbox2/level2/index.html",
-      "games/clickbox2/level3/index.html"
-    ]
-  }
-];
-const userLikes = [];
+export { currentGameIndex, currentLevelIndex };
 
-const gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
+let gameList = [];
+let gameOrder = [];
+let userLikes = [];
+
 let currentIndex = 0;
 let currentGameIndex = 0;
 let currentLevelIndex = 0;
 
-export function initGameList() {
+export async function initializeGameList() {
+  gameList = await loadGameList();
+  console.log("🎮 Loaded game list:", gameList);
+
+  gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
+  shuffle(gameOrder);
+
+  loadGame(gameOrder[0], 0);
+}
+
+export function shuffle() {
   for (let i = gameOrder.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [gameOrder[i], gameOrder[j]] = [gameOrder[j], gameOrder[i]];

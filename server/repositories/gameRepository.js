@@ -8,6 +8,31 @@ exports.createGame = async ({ gameId, gameName, levelCount, genre }) => {
   await db.execute(sql, [gameId, gameName, levelCount, genre]);
 };
 
+exports.getGameList = async () => {
+  const sql = `
+    SELECT 
+      game_id AS gameId,
+      name,
+      level_count AS levels,
+      play_cost AS cost,
+      base_reward AS reward,
+      genre_tags AS tags,
+      total_play_count AS playCount
+    FROM games
+  `;
+
+  const [rows] = await db.execute(sql);
+
+  return rows.map(game => ({
+    ...game,
+    tags: Array.isArray(game.tags)
+      ? game.tags
+      : typeof game.tags === "string"
+      ? JSON.parse(game.tags)
+      : [],
+  }));
+};
+
 exports.getGameById = async (gameId) => {
   const sql = `SELECT * FROM games WHERE game_id = ?`;
   const [rows] = await db.execute(sql, [gameId]);

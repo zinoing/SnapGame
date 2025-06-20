@@ -1,12 +1,12 @@
 import { updateUserCoinUI } from "../ui/coin-ui.js";
 import { initSwipeUI } from "../ui/swipe-ui.js";
 import {
+  initializeGameList,
   loadGame,
   loadNextGame,
   loadPreviousGame,
   currentGameIndex,
-  currentLevelIndex,
-  gameList
+  currentLevelIndex
 } from "../core/load-game.js";
 
 import { getUserCoins, updateUserCoins } from "../api/userApi.js";
@@ -15,7 +15,7 @@ import { getGameInfo } from "../api/gameApi.js";
 document.addEventListener("DOMContentLoaded", async () => {
   await updateUserCoinUI();
   initSwipeUI();
-  loadNextGame();
+  initializeGameList();
 });
 
 async function submitResult(userId, level, gameId) {
