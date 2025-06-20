@@ -48,6 +48,7 @@ export function createInteractionIcons(gameId, userLikes = []) {
         </svg>
       `;
       likeBtn.setAttribute("data-liked", "true");
+      userLikes.push(gameId);
     } else {
       likeBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" 
@@ -71,15 +72,4 @@ export function createInteractionIcons(gameId, userLikes = []) {
   container.appendChild(likeBtn);
 
   return container;
-}
-
-export function setupInteractionUI(gameId, targetSelector = ".game-container") {
-  const container = document.querySelector(targetSelector);
-  if (!container) {
-    console.warn("No container found for interaction UI");
-    return;
-  }
-
-  const interactionIcons = createInteractionIcons(gameId);
-  container.appendChild(interactionIcons);
 }
