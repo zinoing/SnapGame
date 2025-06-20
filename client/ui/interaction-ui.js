@@ -8,11 +8,14 @@ export function createInteractionIcons(gameId, userLikes = []) {
   container.style.flexDirection = "column";
   container.style.gap = "12px";
   container.style.zIndex = "999";
+  container.style.background = "none";
 
   // like Button
   const likeBtn = document.createElement("button");
   likeBtn.setAttribute("data-liked", "false");
 
+  likeBtn.style.background = "transparent";
+  likeBtn.style.border = "none";
   likeBtn.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" 
         width="25" height="25" 
