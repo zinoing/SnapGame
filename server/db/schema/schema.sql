@@ -56,14 +56,4 @@ CREATE TABLE game_likes (
   FOREIGN KEY (game_id) REFERENCES games(game_id)
 );
 
-CREATE TABLE game_favorites (
-  user_id VARCHAR(50),
-  game_id VARCHAR(50),
-  favorited_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (user_id, game_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id),
-  FOREIGN KEY (game_id) REFERENCES games(game_id)
-);
-
-
 SET FOREIGN_KEY_CHECKS = 1;

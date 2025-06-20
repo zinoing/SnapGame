@@ -15,7 +15,7 @@ VALUES (
   'test123',
   '0000', -- 테스트용, 실제 운영 시 bcrypt 해시로 대체
   'TestUser',
-  300,
+  3000,
   0,
   NULL,
   0,
