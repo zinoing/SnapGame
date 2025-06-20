@@ -24,7 +24,6 @@ const gameList = [
   }
 ];
 const userLikes = [];
-const userFavorites = [];
 
 const gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
 let currentIndex = 0;
@@ -49,7 +48,7 @@ export function loadGame(gameIndex, levelIndex) {
   const iframe = document.createElement("iframe");
   iframe.src = `../${levelUrl}`;
   
-  const interactionIcons = createInteractionIcons(game.id, userLikes, userFavorites);
+  const interactionIcons = createInteractionIcons(game.id, userLikes);
   wrapper.appendChild(interactionIcons);
 
   wrapper.appendChild(iframe);
