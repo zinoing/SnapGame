@@ -1,11 +1,13 @@
-import { getCurrentLevel, getLevelChecker, incrementLevel} from "../level.js";
-import { getScore, incrementScore} from "../score.js";
+import { getLevelChecker } from "../levelChecker.js";
 
 const GAME_ID = window.GAME_CONFIG.GAME_ID;
-const checker = getLevelChecker();
+let levelChecker = null;
 
 let box;
 let scoreText;
+
+let currentScore = 0;
+let currentLevel = 0;
 
 const config = {
   type: Phaser.AUTO,
@@ -20,8 +22,31 @@ const config = {
 
 const game = new Phaser.Game(config);
 
+function postToParent(type, payload = {}) {
+  window.parent.postMessage({ type, ...payload }, "*");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  postToParent("REQUEST_GAME_STATE", { gameId: window.GAME_CONFIG.GAME_ID });
+});
+
+window.addEventListener("message", (event) => {
+  const { type, level, score } = event.data;
+
+  if (type === "INIT_GAME_STATE") {
+    currentLevel = level ?? 0;
+    currentScore = score ?? 0;
+
+    if (scoreText) {
+      scoreText.setText("Score: " + currentScore);
+    }
+
+    levelChecker = getLevelChecker(currentLevel);
+  }
+});
+
 function create() {
-  scoreText = this.add.text(20, 20, "Score: " + getScore(), {
+  scoreText = this.add.text(20, 20, "Score: " + currentScore, {
     fontSize: "24px",
     fill: "#fff"
   });
@@ -29,17 +54,13 @@ function create() {
   box = this.add.rectangle(200, 300, 100, 100, 0xff0000).setInteractive();
 
   box.on("pointerdown", () => {
-    incrementScore();
-    
-    let score = getScore();
-    scoreText.setText("Score: " + score);
+    currentScore++;
+    scoreText.setText("Score: " + currentScore);
 
-    if (checker.succeed({ score })) {
-      const level = getCurrentLevel();
-      incrementLevel();
-      window.parent.postMessage({ type: "clear", score, level: level , gameId: GAME_ID }, "*");
-    }
-  });
+    if (levelChecker.succeed(currentScore)) {
+      window.parent.postMessage({ type: "CLEAR", score: currentScore, level: currentLevel, gameId: GAME_ID }, "*");
+    };
+  })
 }
 
 function update() {}

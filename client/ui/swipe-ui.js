@@ -1,4 +1,4 @@
-import { loadNextGame, loadPreviousGame } from "../core/load-game.js";
+import { loadNextLevel, loadPreviousLevel } from "../core/load-game.js";
 
 let touchStartY = 0;
 let touchEndY = 0;
@@ -25,11 +25,11 @@ function onTouchEnd(e) {
 function handleSwipeGesture() {
   const delta = touchStartY - touchEndY;
 
-  if (Math.abs(delta) < 50) return; // 너무 작은 스와이프 무시
+  if (Math.abs(delta) < 50) return;
 
   if (delta > 0) {
-    loadNextGame();
+    loadNextLevel();
   } else {
-    loadPreviousGame();
+    loadPreviousLevel();
   }
 }

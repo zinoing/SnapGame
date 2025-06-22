@@ -1,14 +1,14 @@
-function showDoubleOrFinish(score, onFinish, onDouble, currentLevel, isLastLevel) {
+function showDoubleOrDone(score, onDone, onDouble, currentLevel, isLastLevel) {
   if (isLastLevel) {
-    window.parent.postMessage({ type: "clear", score, currentLevel }, "*");
+    window.parent.postMessage({ type: "CLEAR", score, currentLevel }, "*");
     return;
   }
 
-  const existing = document.getElementById("double-or-finish-ui");
+  const existing = document.getElementById("double-or-done-ui");
   if (existing) existing.remove();
   
   const container = document.createElement("div");
-  container.id = "double-or-finish-ui";
+  container.id = "double-or-done-ui";
   container.style.position = "fixed";
   container.style.top = "0";
   container.style.left = "0";
@@ -22,7 +22,7 @@ function showDoubleOrFinish(score, onFinish, onDouble, currentLevel, isLastLevel
   container.style.zIndex = "9999";
 
   const text = document.createElement("div");
-  text.innerText = `Score: ${score}\nDo you want to DOUBLE or FINISH?`;
+  text.innerText = `Score: ${score}\n DOUBLE or Done?`;
   text.style.color = "white";
   text.style.fontSize = "24px";
   text.style.marginBottom = "20px";
@@ -36,16 +36,16 @@ function showDoubleOrFinish(score, onFinish, onDouble, currentLevel, isLastLevel
     onDouble();
   };
 
-  const btnFinish = document.createElement("button");
-  btnFinish.innerText = "✅ Finish";
-  btnFinish.style.margin = "10px";
-  btnFinish.onclick = () => {
+  const btnDone = document.createElement("button");
+  btnDone.innerText = "✅ Done";
+  btnDone.style.margin = "10px";
+  btnDone.onclick = () => {
     container.remove();
-    onFinish();
+    onDone();
   };
 
   container.appendChild(text);
   container.appendChild(btnDouble);
-  container.appendChild(btnFinish);
+  container.appendChild(btnDone);
   document.body.appendChild(container);
 }

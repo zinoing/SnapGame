@@ -1,4 +1,4 @@
-export function createInteractionIcons(gameId, userLikes = []) {
+export function createInteractionIcons(gameId) {
   const container = document.createElement("div");
   container.style.position = "absolute";
   container.style.top = "50%";
@@ -48,7 +48,6 @@ export function createInteractionIcons(gameId, userLikes = []) {
         </svg>
       `;
       likeBtn.setAttribute("data-liked", "true");
-      userLikes.push(gameId);
     } else {
       likeBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" 

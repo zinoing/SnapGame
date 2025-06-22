@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS games;
 CREATE TABLE games (
   game_id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
+  game_description VARCHAR(100) NOT NULL,
   level_count INT NOT NULL,
   play_cost INT NOT NULL,
   base_reward INT NOT NULL,

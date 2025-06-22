@@ -30,6 +30,7 @@ ON DUPLICATE KEY UPDATE
 INSERT IGNORE INTO games (
   game_id,
   name,
+  game_description,
   level_count,
   play_cost,
   base_reward,
@@ -41,6 +42,7 @@ INSERT IGNORE INTO games (
 VALUES (
   'clickbox1',
   'clickbox1',
+  'Click red box',
   3,
   10,
   20,
@@ -53,6 +55,7 @@ VALUES (
 INSERT IGNORE INTO games (
   game_id,
   name,
+  game_description,
   level_count,
   play_cost,
   base_reward,
@@ -64,6 +67,7 @@ INSERT IGNORE INTO games (
 VALUES (
   'clickbox2',
   'clickbox2',
+  'Click blue box',
   3,
   20,
   30,

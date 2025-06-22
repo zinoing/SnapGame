@@ -1,68 +1,73 @@
 import { createInteractionIcons } from "../ui/interaction-ui.js";
-import { loadGameList, getGameList } from "./gameListLoader.js";
+import { getGameManifestList } from "./load-gameList.js";
+import { getGameOrder } from "../user-state/gameOrder.js";
+import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/level.js";
 
-export { currentGameIndex, currentLevelIndex };
+const GAME_BASE_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/";
 
-let gameList = [];
-let gameOrder = [];
-let userLikes = [];
-
-let currentIndex = 0;
-let currentGameIndex = 0;
-let currentLevelIndex = 0;
-
-export async function initializeGameList() {
-  gameList = await loadGameList();
-  console.log("🎮 Loaded game list:", gameList);
-
-  gameOrder = Array.from({ length: gameList.length }, (_, i) => i);
-  shuffle(gameOrder);
-
-  loadGame(gameOrder[0], 0);
-}
-
-export function shuffle() {
-  for (let i = gameOrder.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [gameOrder[i], gameOrder[j]] = [gameOrder[j], gameOrder[i]];
-  }
-}
-
-export function loadGame(gameIndex, levelIndex) {
+export async function loadGame(gameIndex, levelIndex = 0) {
+  const gameList = getGameManifestList();
   const game = gameList[gameIndex];
-  const levelUrl = game.levels[levelIndex];
-
-  const wrapper = document.createElement("div");
-  wrapper.className = "game-container";
-  wrapper.style.position = "relative";
-
-  const iframe = document.createElement("iframe");
-  iframe.src = `../${levelUrl}`;
-  
-  const interactionIcons = createInteractionIcons(game.id, userLikes);
-  wrapper.appendChild(interactionIcons);
-
-  wrapper.appendChild(iframe);
-
-  const feed = document.getElementById("feed");
-  if (!feed) {
-    console.error("❌ feed container not found");
+  if (!game) {
+    console.error("❌ Invalid game index:", gameIndex);
     return;
   }
 
-  feed.innerHTML = "";
-  feed.appendChild(wrapper);
+  const gameId = game.gameId;
+  const manifestUrl = `${GAME_BASE_URL}${gameId}/gameManifest.json`;
 
-  currentGameIndex = gameIndex;
-  currentLevelIndex = levelIndex;
+  try {
+    const res = await fetch(manifestUrl);
+    if (!res.ok) throw new Error("❌ manifest fetch 실패");
+
+    const manifest = await res.json();
+
+    let rawEntryPath = null;
+    if(levelIndex == 0) {
+      rawEntryPath = manifest.entry ?? "intro/intro.html";
+    }
+    else {
+      rawEntryPath = `level${levelIndex}/index.html`
+    }
+
+    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
+    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://localhost:3000/games/`").toString();
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "game-container";
+    wrapper.style.position = "relative";
+
+    const iframe = document.createElement("iframe");
+    iframe.id = "iframe";
+    iframe.src = entryUrl;
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.border = "none";
+
+    const interactionIcons = createInteractionIcons(gameId);
+    wrapper.appendChild(interactionIcons);
+    wrapper.appendChild(iframe);
+
+    const feed = document.getElementById("feed");
+    if (!feed) return console.error("❌ #feed not found");
+
+    feed.innerHTML = "";
+    feed.appendChild(wrapper);
+
+    console.log(`✅ Loaded game: ${gameId}`);
+  } catch (err) {
+    console.error("❌ loadGame failed:", err);
+  }
 }
 
-export function loadNextGame() {
-  currentIndex = (currentIndex + 1) % gameOrder.length;
-  loadGame(gameOrder[currentIndex], 0);
+export async function loadNextLevel(gameIndex, levelIndex) {
+  const gameOrder = getGameOrder();
+  setLevel(levelIndex + 1);
+  await loadGame(gameOrder[gameIndex], getLevel());
 }
 
-export function loadPreviousGame() {
-  currentIndex = (currentIndex - 1 + gameOrder.length) % gameOrder.length;
-  loadGame(gameOrder[currentIndex], 0);
+export async function loadPreviousLevel(gameIndex, levelIndex) {
+  const gameOrder = getGameOrder();
+  setLevel(levelIndex - 1);
+  await loadGame(gameOrder[gameIndex], getLevel());
 }
