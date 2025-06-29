@@ -19,8 +19,13 @@ export function setGameOrder(orderArray) {
 }
 
 export function getNextGameIdx() {
-  if (currentIndex >= gameOrder.length) return null;
-  return gameOrder[++currentIndex];
+  currentIndex = (currentIndex + 1) % gameOrder.length;
+  return gameOrder[currentIndex];
+}
+
+export function getPreviousGameIdx() {
+  currentIndex = (currentIndex - 1 + gameOrder.length) % gameOrder.length;
+  return gameOrder[currentIndex];
 }
 
 export function resetOrder() {

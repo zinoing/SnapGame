@@ -1,4 +1,6 @@
-import { loadNextLevel, loadPreviousLevel } from "../core/load-game.js";
+import { loadGame } from "../core/load-game.js";
+import { getNextGameIdx, getPreviousGameIdx } from "../user-state/gameOrder.js";
+import { getLevel } from "../user-state/level.js";
 
 let touchStartY = 0;
 let touchEndY = 0;
@@ -17,19 +19,19 @@ function onTouchStart(e) {
   touchStartY = e.changedTouches[0].screenY;
 }
 
-function onTouchEnd(e) {
+async function onTouchEnd(e) {
   touchEndY = e.changedTouches[0].screenY;
-  handleSwipeGesture();
+  await handleSwipeGesture();
 }
 
-function handleSwipeGesture() {
+async function handleSwipeGesture() {
   const delta = touchStartY - touchEndY;
 
   if (Math.abs(delta) < 50) return;
 
   if (delta > 0) {
-    loadNextLevel();
+      await loadGame(getNextGameIdx(), getLevel());
   } else {
-    loadPreviousLevel();
+      await loadGame(getPrev(), getLevel());
   }
 }

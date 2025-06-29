@@ -1,4 +1,4 @@
-const GAME_LIST_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/gameList.json";
+import { getGameList } from "../api/gameApi.js"
 
 let gameManifestList = null;
 
@@ -19,8 +19,7 @@ function shuffle(gameOrder = []) {
 }
 
 export async function loadGameManifestList() {
-  const res = await fetch(GAME_LIST_URL);
-  const rawList = await res.json();
+  const rawList = await getGameList();
 
   const gameManifestList = rawList.map(game => {
     const levels = [];

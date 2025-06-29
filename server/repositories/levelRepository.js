@@ -1,18 +1,16 @@
 const db = require("../db/mysql");
 const redis = require("../db/redis/redis");
 
-exports.createLevel = async (gameId, levelIndex) => {
-  const sql = `INSERT INTO levels (game_id, level_index) VALUES (?, ?)`;
+exports.incrementLevelAttempt = async (gameId, levelIndex) => {
+  const sql = `UPDATE levels SET level_attempts = level_attempts + 1
+              WHERE game_id = ? AND level_index = ?`;
+
   await db.execute(sql, [gameId, levelIndex]);
 };
 
-exports.incrementDoubleAttempt = async (gameId, levelIndex, success = false) => {
-  const sql = success
-    ? `UPDATE levels SET double_attempts = double_attempts + 1, double_successes = double_successes + 1
-       WHERE game_id = ? AND level_index = ?`
-    : `UPDATE levels SET double_attempts = double_attempts + 1
-       WHERE game_id = ? AND level_index = ?`;
-
+exports.incrementLevelSuccess = async (gameId, levelIndex) => {
+  const sql = `UPDATE levels SET level_successes = level_successes + 1
+              WHERE game_id = ? AND level_index = ?`;
   await db.execute(sql, [gameId, levelIndex]);
 };
 

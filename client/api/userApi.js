@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api/user";
+const API_BASE = "http://10.0.2.2:3000/api/user";
 
 export async function getUserCoins(userId) {
   const res = await fetch(`${API_BASE}/${userId}/coins`);

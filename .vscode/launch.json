@@ -17,8 +17,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:3000/index.html",
+            "name": "Launch Chrome against 10.0.2.2",
+            "url": "http://10.0.2.2:3000/index.html",
             "webRoot": "${workspaceFolder}\\client"
         }
     ]

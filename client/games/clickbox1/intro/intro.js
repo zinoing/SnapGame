@@ -1,5 +1,6 @@
 import { getUserCoins } from "../../../api/userApi.js";
 import { getGameInfo } from "../../../api/gameApi.js";
+import { incrementLevelAttempt} from "../../../api/levelApi.js";
 
 const gameNameEl = document.getElementById("game-name");
 const gameDescriptionEl = document.getElementById("game-description");
@@ -10,11 +11,13 @@ const playButton = document.getElementById("play-button");
 
 async function initIntro(userId) {
   try {
-    console.log(window.GAME_CONFIG.GAME_ID);
-    console.log(userId);
+    console.log("get game");
     const game = await getGameInfo(window.GAME_CONFIG.GAME_ID);
+    console.log(game);
+    console.log("get coins");
     const userCoins = await getUserCoins(userId);
-    
+    console.log(userCoins);
+
     gameNameEl.textContent = game.name;
     gameDescriptionEl.textContent = game.description;
 
@@ -35,6 +38,7 @@ async function initIntro(userId) {
           type: "PLAY",
           gameId: window.GAME_CONFIG.GAME_ID, 
         }, "*");
+        await incrementLevelAttempt(window.GAME_CONFIG.GAME_ID, 1);
       } else {
         console.warn("Not in iframe — staying on current page");
       }

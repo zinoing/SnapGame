@@ -16,15 +16,9 @@ app.use("/api/user", require("./routes/user"));
 app.use("/api/level", require("./routes/level")); 
 app.use("/api/interaction", require("./routes/gameInteraction")); 
 app.use("/api/user-stats", require("./routes/userStats"));
+app.use("/api/rank", require("./routes/rank"));
 
 const PORT = 3000;
 app.listen(PORT, "0.0.0.0", async () => {
   console.log(`Server running on port ${PORT}`);
-
-  try {
-    await uploadGameListToS3();
-    console.log("✅ S3에 gameList.json 생성 완료");
-  } catch (err) {
-    console.error("❌ gameList 업로드 실패:", err);
-  }
 });

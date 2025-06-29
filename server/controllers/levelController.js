@@ -1,17 +1,31 @@
-const levelRepo = require("../repositories/levelRepository");
+const repo = require("../repositories/levelRepository");
 
-exports.trackDoubleAttempt = async (req, res) => {
-  const { gameId, levelIndex, success } = req.body;
-
+exports.incrementLevelAttempt = async (req, res) => {
+  const { gameId, levelIndex } = req.body;
   if (!gameId || levelIndex === undefined) {
     return res.status(400).json({ error: "Missing gameId or levelIndex" });
   }
 
   try {
-    await levelRepo.incrementDoubleAttempt(gameId, levelIndex, success);
-    res.status(200).json({ message: "Level stats updated" });
+    await repo.incrementLevelAttempt(gameId, levelIndex);
+    res.status(200).json({ message: "Level attempt incremented" });
   } catch (err) {
-    console.error("Error updating level stats:", err);
+    console.error("Error incrementing level attempt:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.incrementLevelSuccess = async (req, res) => {
+  const { gameId, levelIndex } = req.body;
+  if (!gameId || levelIndex === undefined) {
+    return res.status(400).json({ error: "Missing gameId or levelIndex" });
+  }
+
+  try {
+    await repo.incrementLevelSuccess(gameId, levelIndex);
+    res.status(200).json({ message: "Level success incremented" });
+  } catch (err) {
+    console.error("Error incrementing level success:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -19,9 +33,16 @@ exports.trackDoubleAttempt = async (req, res) => {
 exports.getLevelStats = async (req, res) => {
   const { gameId, levelIndex } = req.params;
 
+  if (!gameId || levelIndex === undefined) {
+    return res.status(400).json({ error: "Missing gameId or levelIndex" });
+  }
+
   try {
-    const stats = await levelRepo.getLevelStats(gameId, levelIndex);
-    res.json(stats);
+    const stats = await repo.getLevelStats(gameId, parseInt(levelIndex));
+    if (!stats) {
+      return res.status(404).json({ error: "Level not found" });
+    }
+    res.status(200).json(stats);
   } catch (err) {
     console.error("Error fetching level stats:", err);
     res.status(500).json({ error: "Internal server error" });

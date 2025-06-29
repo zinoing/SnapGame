@@ -1,4 +1,4 @@
-import { getUserCoins } from "../../../api/userApi.js";
+import { getUserCoins } from "../api/userApi.js";
 
 export async function updateUserCoinUI(userId) {
     try {

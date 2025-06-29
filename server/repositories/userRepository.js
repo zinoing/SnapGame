@@ -1,6 +1,7 @@
 const db = require("../db/mysql");
 const { hGet, hSet } = require("../db/redis/redisUtils");
 const { userKey } = require("../db/redis/redisKeys");
+const { updateCoinRanking } = require("../services/coinRankingService");
 
 exports.createUser = async ({ userId, nickname, passwordHash = null }) => {
   const sql = `
@@ -71,6 +72,8 @@ exports.getUserCoins = async (userId) => {
 };
 
 exports.setUserCoins = async (userId, coins) => {
+  await updateCoinRanking(userId, coins);
+
   const sql = `UPDATE users SET coins = ? WHERE user_id = ?`;
   await db.execute(sql, [coins, userId]);
   await hSet(userKey(userId), "coins", coins.toString());

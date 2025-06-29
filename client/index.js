@@ -3,7 +3,7 @@ function startGame() {
 }
 
 function goToRanking() {
-    alert("Ranking is coming soon!");
+    window.location.href = "leader-board/leader-board.html";
 }
 
 function goToShop() {

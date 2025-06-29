@@ -1,4 +1,5 @@
 import { getLevelChecker } from "../levelChecker.js";
+import { showDoubleOrDone } from "../ui/finish-ui.js";
 
 let game = null;
 let currentScore = 0;
@@ -46,12 +47,12 @@ function create() {
 
   box = this.add.rectangle(200, 300, 100, 100, 0xff0000).setInteractive();
 
-  box.on("pointerdown", () => {
+  box.on("pointerdown", async () => {
     currentScore++;
     scoreText.setText("Score: " + currentScore);
 
     if (levelChecker && levelChecker.succeed(currentScore)) {
-      showDoubleOrDone(currentScore, () => {
+      await showDoubleOrDone(currentScore, () => {
         postToParent("DONE", {
           gameId: window.GAME_CONFIG.GAME_ID,
           level: currentLevel,

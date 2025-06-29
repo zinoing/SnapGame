@@ -17,8 +17,6 @@ async function updateGameResult(userId, level, gameId) {
   const reward = base_reward * Math.pow(2, level - 1);
   newCoins += reward;
 
-  await redis.hSet(userKey, "coins", newCoins);
-
   await userRepo.setUserCoins(userId, newCoins); 
 
   return { success: true, coins: newCoins, reward };

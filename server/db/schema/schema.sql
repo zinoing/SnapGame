@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS games;
 CREATE TABLE games (
   game_id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  game_description VARCHAR(100) NOT NULL,
+  description VARCHAR(100) NOT NULL,
   level_count INT NOT NULL,
   play_cost INT NOT NULL,
   base_reward INT NOT NULL,
@@ -40,8 +40,8 @@ DROP TABLE IF EXISTS levels;
 CREATE TABLE levels (
   game_id VARCHAR(50),
   level_index INT,
-  double_attempts INT DEFAULT 0,
-  double_successes INT DEFAULT 0,
+  level_attempts INT DEFAULT 0,
+  level_successes INT DEFAULT 0,
   avg_clear_time INT DEFAULT 0,
   fail_rate FLOAT DEFAULT 0,
   PRIMARY KEY (game_id, level_index),

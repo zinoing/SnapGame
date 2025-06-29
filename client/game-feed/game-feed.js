@@ -82,7 +82,7 @@ window.addEventListener("message", async (event) => {
 
       resetScore();
       resetLevel();
-      await loadNextLevel(getCurrentGameIdx(), getLevel());
+      await loadGame(getNextGameIdx(), getLevel());
       await updateUserCoinUI(window.USER_ID.BASE_ID);
       break;
     }
@@ -110,7 +110,6 @@ window.addEventListener("message", async (event) => {
       await updateUserCoinUI(window.USER_ID.BASE_ID);
       break;
     }
-
   }
 });
 

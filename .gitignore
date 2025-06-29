@@ -155,4 +155,7 @@ ios/build/
 # server ip and port
 config.js
 
+#mobile-app
+mobile-app/
+
 # End of https://www.toptal.com/developers/gitignore/api/node

@@ -1,4 +1,11 @@
-function showDoubleOrDone(score, onDone, onDouble, currentLevel, isLastLevel) {
+import {
+  incrementLevelSuccess,
+  incrementLevelAttempt
+} from "../../../api/levelApi.js";
+
+export async function showDoubleOrDone(score, onDone, onDouble, currentLevel, isLastLevel) {
+  await incrementLevelSuccess(window.GAME_CONFIG.GAME_ID, currentLevel);
+
   if (isLastLevel) {
     window.parent.postMessage({ type: "CLEAR", score, currentLevel }, "*");
     return;
@@ -22,7 +29,7 @@ function showDoubleOrDone(score, onDone, onDouble, currentLevel, isLastLevel) {
   container.style.zIndex = "9999";
 
   const text = document.createElement("div");
-  text.innerText = `Score: ${score}\n DOUBLE or Done?`;
+  text.innerText = `Score: ${score}\n Double or Done?`;
   text.style.color = "white";
   text.style.fontSize = "24px";
   text.style.marginBottom = "20px";
@@ -31,8 +38,9 @@ function showDoubleOrDone(score, onDone, onDouble, currentLevel, isLastLevel) {
   const btnDouble = document.createElement("button");
   btnDouble.innerText = "🔥 Double";
   btnDouble.style.margin = "10px";
-  btnDouble.onclick = () => {
+  btnDouble.onclick = async () => {
     container.remove();
+    await incrementLevelAttempt(window.GAME_CONFIG.GAME_ID, currentLevel + 1);
     onDouble();
   };
 

@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  background-color: #000;
+  color: white;
+  font-family: sans-serif;
+}
+
+#leader-board-container {
+  padding: 24px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#leader-board-container h2 {
+  text-align: center;
+}
+
+.leader-item {
+  margin: 6px 0;
+  padding: 6px;
+  background: #222;
+  border-radius: 8px;
+}
+
+.leader-item.gold {
+  background: #ffd70033;
+}
+.leader-item.silver {
+  background: #c0c0c033;
+}
+.leader-item.bronze {
+  background: #cd7f3233;
+}
+
+.my-rank {
+  margin-top: 20px;
+  border-top: 1px solid #555;
+  padding-top: 10px;
+  text-align: center;
+  color: #00ccff;
+}

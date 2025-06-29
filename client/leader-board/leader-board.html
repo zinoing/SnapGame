@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Coin Leaderboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./leader-board.css" />
+</head>
+<body>
+  <div id="leader-board-container">Loading...</div>
+
+  <script type="module">
+    import { renderLeaderBoard } from "./leader-board.js";
+
+    const userId = window.USER_ID?.BASE_ID ?? null;
+    const container = document.getElementById("leader-board-container");
+
+    renderLeaderBoard(container, userId);
+  </script>
+</body>
+</html>

@@ -31,6 +31,16 @@ exports.getGame = async (req, res) => {
   }
 };
 
+exports.getGameList = async (req, res) => {
+  try {
+    const gameList = await gameRepo.getGameList();
+    res.json(gameList);
+  } catch (err) {
+    console.error("Error getting top games:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 exports.getTopGames = async (req, res) => {
   try {
     const topGames = await gameRepo.getTopGames(10);
