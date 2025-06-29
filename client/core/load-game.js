@@ -44,7 +44,7 @@ export async function loadGame(gameIndex, levelIndex = 0) {
     iframe.style.height = "100%";
     iframe.style.border = "none";
 
-    const interactionIcons = createInteractionIcons(gameId);
+    const interactionIcons = await createInteractionIcons(gameId);
     wrapper.appendChild(interactionIcons);
     wrapper.appendChild(iframe);
 
