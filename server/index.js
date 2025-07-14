@@ -1,4 +1,3 @@
-const { uploadGameListToS3 } = require("./gameListUploader");
 const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
