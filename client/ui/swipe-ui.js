@@ -28,9 +28,9 @@ async function onTouchEnd(e) {
 
 async function onKeyDown(e) {
   if (e.key === "ArrowUp") {
-    await loadGame(getPreviousGameIdx(), getLevel());
+    await loadGame(getPreviousGameIdx(), 0);
   } else if (e.key === "ArrowDown") {
-    await loadGame(getNextGameIdx(), getLevel());
+    await loadGame(getNextGameIdx(), 0);
   }
 }
 
@@ -40,8 +40,8 @@ async function handleSwipeGesture() {
   if (Math.abs(delta) < 50) return;
 
   if (delta > 0) {
-      await loadGame(getNextGameIdx(), getLevel());
+      await loadGame(getNextGameIdx(), 0);
   } else {
-      await loadGame(getPreviousGameIdx(), getLevel());
+      await loadGame(getPreviousGameIdx(), 0);
   }
 }
