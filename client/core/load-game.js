@@ -30,8 +30,8 @@ export async function loadGame(gameIndex, levelIndex = 0) {
       rawEntryPath = `level${levelIndex}/index.html`
     }
 
-    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
-    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://10.0.2.2:3000/games/").toString();
+    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
+    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://10.0.2.2:3000/games/").toString();
 
     const wrapper = document.createElement("div");
     wrapper.className = "game-container";

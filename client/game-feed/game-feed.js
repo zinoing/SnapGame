@@ -25,9 +25,9 @@ async function submitResult(userId, level, gameId) {
       body: JSON.stringify({ userId, level, gameId })
     });
     const data = await res.json();
-    console.log("서버 응답:", data);
+    console.log("server response:", data);
   } catch (err) {
-    console.error("서버 요청 실패:", err);
+    console.error("server response failed:", err);
   }
 }
 
