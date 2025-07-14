@@ -13,6 +13,8 @@ export function initSwipeUI() {
     el.addEventListener("touchstart", onTouchStart, { passive: true });
     el.addEventListener("touchend", onTouchEnd, { passive: true });
   });
+
+  document.addEventListener("keydown", onKeyDown);
 }
 
 function onTouchStart(e) {
@@ -24,6 +26,14 @@ async function onTouchEnd(e) {
   await handleSwipeGesture();
 }
 
+async function onKeyDown(e) {
+  if (e.key === "ArrowUp") {
+    await loadGame(getPreviousGameIdx(), getLevel());
+  } else if (e.key === "ArrowDown") {
+    await loadGame(getNextGameIdx(), getLevel());
+  }
+}
+
 async function handleSwipeGesture() {
   const delta = touchStartY - touchEndY;
 
@@ -32,6 +42,6 @@ async function handleSwipeGesture() {
   if (delta > 0) {
       await loadGame(getNextGameIdx(), getLevel());
   } else {
-      await loadGame(getPrev(), getLevel());
+      await loadGame(getPreviousGameIdx(), getLevel());
   }
 }
