@@ -3,7 +3,8 @@ import { getGameManifestList } from "./load-gameList.js";
 import { getGameOrder } from "../user-state/gameOrder.js";
 import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/level.js";
 
-const GAME_BASE_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/";
+//const GAME_BASE_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/";
+const GAME_BASE_URL = "http://localhost:3000/games/";
 
 export async function loadGame(gameIndex, levelIndex = 0) {
   const gameList = getGameManifestList();
@@ -30,8 +31,8 @@ export async function loadGame(gameIndex, levelIndex = 0) {
       rawEntryPath = `level${levelIndex}/index.html`
     }
 
-    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
-    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://10.0.2.2:3000/games/").toString();
+    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
+    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://localhost:3000/games/").toString();
 
     const wrapper = document.createElement("div");
     wrapper.className = "game-container";

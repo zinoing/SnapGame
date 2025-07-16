@@ -44,3 +44,25 @@ export async function incrementLevelSuccess(gameId, levelIndex) {
     console.error("Network error in incrementLevelSuccess:", err);
   }
 }
+
+export async function getMissionDescription(gameId, levelIndex) {
+  try {
+    const res = await fetch(`${BASE_URL}/missionDescription`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ gameId, levelIndex }),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to get mission description:", res.statusText);
+      return null;
+    }
+
+    const data = await res.json();
+    return data.description;
+  } catch (err) {
+    console.error("Network error in getMissionDescription:", err);
+    return null;
+  }
+}
+

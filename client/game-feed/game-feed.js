@@ -5,7 +5,6 @@ import { loadGame, loadNextLevel } from "../core/load-game.js";
 import { getUserCoins, updateUserCoins } from "../api/userApi.js";
 import { getGameInfo } from "../api/gameApi.js";
 import { getCurrentGameIdx, getCurrentGame, getGameOrderByIdx, getNextGameIdx, setGameOrder } from "../user-state/gameOrder.js";
-import { getScore, setScore, resetScore } from "../user-state/score.js";
 import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/level.js";
 import { getGameManifestList } from "../core/load-gameList.js";
 
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function submitResult(userId, level, gameId) {
   try {
-    const res = await fetch(`${SERVER_CONFIG.BASE_URL}/api/game/result`, {
+    const res = await fetch(`${SERVER_CONFIG.LOCAL_URL}/api/game/result`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, level, gameId })
@@ -32,7 +31,7 @@ async function submitResult(userId, level, gameId) {
 }
 
 window.addEventListener("message", async (event) => {
-  const { type, gameId, level, score } = event.data;
+  const { type, gameId, level, reward } = event.data;
 
   switch (type) {
     case "INTRO_READY": {
@@ -47,7 +46,6 @@ window.addEventListener("message", async (event) => {
     case "REQUEST_GAME_STATE": {
       const state = {
         type: "INIT_GAME_STATE",
-        score: getScore(),
         level: getLevel()
       };
 
@@ -67,7 +65,6 @@ window.addEventListener("message", async (event) => {
     }
 
     case "FAIL": {
-      resetScore();
       resetLevel();
       alert("You failed");
       await loadGame(getCurrentGame(), getLevel());
@@ -75,12 +72,10 @@ window.addEventListener("message", async (event) => {
     }
 
     case "DONE": {
-      alert("🎉 You scored " + score + " points!");
+      alert("🎉 You earned " + reward + " coins!");
 
-      setScore(score);
       await submitResult(window.USER_ID.BASE_ID, level, gameId);
 
-      resetScore();
       resetLevel();
       await loadGame(getNextGameIdx(), getLevel());
       await updateUserCoinUI(window.USER_ID.BASE_ID);
@@ -88,7 +83,6 @@ window.addEventListener("message", async (event) => {
     }
 
     case "DOUBLE": {
-      setScore(score);
       const game = getGameManifestList()[getCurrentGameIdx()];
       if (level + 1 < game.levels.length) {
         setLevel(level + 1);
@@ -99,12 +93,10 @@ window.addEventListener("message", async (event) => {
 
     case "CLEAR": {
       alert("🎉 You cleared the final level!");
-      alert("🎉 You scored " + score + " points!");
+      alert("🎉 You earned " + reward + " coins!");
 
-      setScore(score);
       await submitResult(window.USER_ID.BASE_ID, level, gameId);
 
-      resetScore();
       resetLevel();
       await loadGame(getNextGameIdx(), getLevel());
       await updateUserCoinUI(window.USER_ID.BASE_ID);

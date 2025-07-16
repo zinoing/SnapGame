@@ -39,7 +39,7 @@ async function initIntro(userId) {
     gameBannerEl.style.backgroundImage = `url('${imagePath}')`;
     gameBannerEl.style.backgroundSize = "cover";
     gameBannerEl.style.backgroundPosition = "center";
-
+    
     if (userCoins < game.play_cost) {
       playButton.disabled = true;
       playButton.textContent = "Not enough coins";
