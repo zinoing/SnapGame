@@ -19,3 +19,9 @@ exports.getLevelStats = async (gameId, levelIndex) => {
   const [rows] = await db.execute(sql, [gameId, levelIndex]);
   return rows[0];
 };
+
+exports.getLevelMissionDescription = async (gameId, levelIndex) => {
+  const sql = `SELECT description FROM levels WHERE game_id = ? AND level_index = ?`;
+  const [rows] = await db.execute(sql, [gameId, levelIndex]);
+  return rows[0];
+};

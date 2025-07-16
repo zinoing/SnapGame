@@ -1,3 +1,5 @@
+USE snapgame;
+
 INSERT IGNORE INTO users (
   user_id,
   password_hash,
@@ -13,19 +15,17 @@ INSERT IGNORE INTO users (
 )
 VALUES (
   'test123',
-  '0000', -- 테스트용, 실제 운영 시 bcrypt 해시로 대체
+  '0000',
   'TestUser',
-  3000,
+  999999999,
   0,
   NULL,
   0,
   0,
   0,
-  JSON_OBJECT(), -- 빈 JSON 객체
+  JSON_OBJECT(), 
   0
-)
-ON DUPLICATE KEY UPDATE
-  coins = 300;
+);
 
 INSERT IGNORE INTO games (
   game_id,
@@ -40,9 +40,9 @@ INSERT IGNORE INTO games (
   avg_play_time
 )
 VALUES (
-  'clickbox1',
-  'clickbox1',
-  'Click red box',
+  'bottle_flip',
+  'bottle flip',
+  'Flip the bottle',
   3,
   10,
   20,
@@ -65,26 +65,28 @@ INSERT IGNORE INTO games (
   avg_play_time
 )
 VALUES (
-  'clickbox2',
-  'clickbox2',
-  'Click blue box',
-  3,
+  'time_stop',
+  'time stop',
+  'Stop the timer at the exact moment',
+  5,
+  10,
   20,
-  30,
   NULL,
   0,
   0,
   0
 );
 
-INSERT IGNORE INTO levels (game_id, level_index)
+INSERT IGNORE INTO levels (game_id, level_index, description)
 VALUES 
-  ('clickbox1', 1),
-  ('clickbox1', 2),
-  ('clickbox1', 3);
+  ('bottle_flip', 1, "Flip the bottle 1 time"),
+  ('bottle_flip', 2, "Flip the bottle 2 times"),
+  ('bottle_flip', 3, "Flip the bottle 3 times");
 
-INSERT IGNORE INTO levels (game_id, level_index)
+INSERT IGNORE INTO levels (game_id, level_index, description)
 VALUES 
-  ('clickbox2', 1),
-  ('clickbox2', 2),
-  ('clickbox2', 3);
+  ('time_stop', 1, 'Stop the timer at exactly 5 seconds'),
+  ('time_stop', 2, 'Stop the timer at exactly 7 seconds'),
+  ('time_stop', 3, 'Stop the timer at exactly 5.0 seconds'),
+  ('time_stop', 4, 'Stop the timer at exactly 7.0 seconds'),
+  ('time_stop', 5, 'Stop the timer at exactly 7.00 seconds');

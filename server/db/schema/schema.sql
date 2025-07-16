@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS snapgame;
 USE snapgame;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -40,6 +41,7 @@ DROP TABLE IF EXISTS levels;
 CREATE TABLE levels (
   game_id VARCHAR(50),
   level_index INT,
+  description VARCHAR(100) NOT NULL,
   level_attempts INT DEFAULT 0,
   level_successes INT DEFAULT 0,
   avg_clear_time INT DEFAULT 0,

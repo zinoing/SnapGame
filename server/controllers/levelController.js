@@ -31,7 +31,7 @@ exports.incrementLevelSuccess = async (req, res) => {
 };
 
 exports.getLevelStats = async (req, res) => {
-  const { gameId, levelIndex } = req.params;
+  const { gameId, levelIndex } = req.body;
 
   if (!gameId || levelIndex === undefined) {
     return res.status(400).json({ error: "Missing gameId or levelIndex" });
@@ -45,6 +45,25 @@ exports.getLevelStats = async (req, res) => {
     res.status(200).json(stats);
   } catch (err) {
     console.error("Error fetching level stats:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getLevelMissionDescription = async (req, res) => {
+  const { gameId, levelIndex } = req.body;
+
+  if (!gameId || levelIndex === undefined) {
+    return res.status(400).json({ error: "Missing gameId or levelIndex" });
+  }
+
+  try {
+    const description = await repo.getLevelMissionDescription(gameId, parseInt(levelIndex));
+    if (!description) {
+      return res.status(404).json({ error: "Level not found" });
+    }
+    res.status(200).json(description);
+  } catch (err) {
+    console.error("Error fetching level mission description:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
