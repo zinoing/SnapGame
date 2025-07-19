@@ -1,12 +1,11 @@
 import { updateUserCoinUI } from "../ui/coin-ui.js";
 import { initSwipeUI } from "../ui/swipe-ui.js";
 import { initializeGameOrder } from "../core/load-gameList.js";
-import { loadGame, loadNextLevel } from "../core/load-game.js";
-import { getUserCoins, updateUserCoins } from "../api/userApi.js";
+import { loadGame, loadNextLevel, loadTransition } from "../core/load-game.js";
+import { getUserCoins } from "../api/userApi.js";
 import { getGameInfo } from "../api/gameApi.js";
-import { getCurrentGameIdx, getCurrentGame, getGameOrderByIdx, getNextGameIdx, setGameOrder } from "../user-state/gameOrder.js";
-import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/level.js";
-import { getGameManifestList } from "../core/load-gameList.js";
+import { getCurrentGameIdx, getGameOrderByIdx, getNextGameIdx, setGameOrder } from "../user-state/gameOrder.js";
+import { getLevel, resetLevel } from "../user-state/level.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await updateUserCoinUI(window.USER_ID.BASE_ID);
@@ -16,12 +15,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadGame(getGameOrderByIdx(0), 0);
 });
 
-async function submitResult(userId, level, gameId) {
+async function submitResult(userId, reward) {
   try {
     const res = await fetch(`${SERVER_CONFIG.LOCAL_URL}/api/game/result`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, level, gameId })
+      body: JSON.stringify({ userId, reward })
     });
     const data = await res.json();
     console.log("server response:", data);
@@ -58,44 +57,25 @@ window.addEventListener("message", async (event) => {
       const gameInfo = await getGameInfo(gameId);
       const coins = await getUserCoins(window.USER_ID.BASE_ID);
 
-      await updateUserCoins(window.USER_ID.BASE_ID, { coins: coins - gameInfo.play_cost });
       await loadNextLevel(getCurrentGameIdx(), getLevel());
       await updateUserCoinUI(window.USER_ID.BASE_ID);
       break;
     }
 
-    case "FAIL": {
-      resetLevel();
-      alert("You failed");
-      await loadGame(getCurrentGame(), getLevel());
+    case "LOAD_TRANSITION": {
+      await loadTransition(getCurrentGameIdx(), getLevel());
+      break;
+    }
+
+    case "LOAD_NEXT_LEVEL": {
+      await loadNextLevel(getCurrentGameIdx(), getLevel());
       break;
     }
 
     case "DONE": {
       alert("🎉 You earned " + reward + " coins!");
 
-      await submitResult(window.USER_ID.BASE_ID, level, gameId);
-
-      resetLevel();
-      await loadGame(getNextGameIdx(), getLevel());
-      await updateUserCoinUI(window.USER_ID.BASE_ID);
-      break;
-    }
-
-    case "DOUBLE": {
-      const game = getGameManifestList()[getCurrentGameIdx()];
-      if (level + 1 < game.levels.length) {
-        setLevel(level + 1);
-        await loadGame(getCurrentGame(), getLevel());
-      }
-      break;
-    }
-
-    case "CLEAR": {
-      alert("🎉 You cleared the final level!");
-      alert("🎉 You earned " + reward + " coins!");
-
-      await submitResult(window.USER_ID.BASE_ID, level, gameId);
+      await submitResult(window.USER_ID.BASE_ID, reward);
 
       resetLevel();
       await loadGame(getNextGameIdx(), getLevel());

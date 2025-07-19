@@ -6,7 +6,7 @@ import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/le
 //const GAME_BASE_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/";
 const GAME_BASE_URL = "http://localhost:3000/games/";
 
-export async function loadGame(gameIndex, levelIndex = 0) {
+export async function loadTransition(gameIndex, levelIndex = 0) {
   const gameList = getGameManifestList();
   const game = gameList[gameIndex];
   if (!game) {
@@ -15,7 +15,40 @@ export async function loadGame(gameIndex, levelIndex = 0) {
   }
 
   const gameId = game.gameId;
-  const manifestUrl = `${GAME_BASE_URL}${gameId}/gameManifest.json`;
+  const transitionUrl = `${GAME_BASE_URL}${gameId}/level-map/level-map.html?level=${levelIndex}`;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "game-container";
+  wrapper.style.position = "relative";
+
+  const iframe = document.createElement("iframe");
+  iframe.id = "iframe";
+  iframe.src = transitionUrl;
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+
+  wrapper.appendChild(iframe);
+
+  const feed = document.getElementById("feed");
+  if (!feed) return console.error("❌ #feed not found");
+
+  feed.innerHTML = "";
+  feed.appendChild(wrapper);
+
+  console.log(`⏳ Loaded transition screen for: ${gameId}`);
+}
+
+export async function loadGame(gameIndex, levelIndex = 0) {
+  const gameList = getGameManifestList();
+  const game =  gameList[gameIndex];
+  if (!game) {
+    console.error("❌ Invalid game index:", gameIndex);
+    return;
+  }
+
+  const gameId = game.gameId;
+  const manifestUrl = `${GAME_BASE_URL}${gameId}/manifest.json`;
 
   try {
     const res = await fetch(manifestUrl);
@@ -25,14 +58,19 @@ export async function loadGame(gameIndex, levelIndex = 0) {
 
     let rawEntryPath = null;
     if(levelIndex == 0) {
-      rawEntryPath = manifest.entry ?? "intro/intro.html";
+      rawEntryPath = manifest.entry ?? "templates/intro.html";
     }
     else {
-      rawEntryPath = `level${levelIndex}/index.html`
+      if(game.mode === 'level') {
+        rawEntryPath = `levels/level${levelIndex}/index.html`
+      }
+
+      if(game.mode === 'score') {
+        rawEntryPath = `templates/index.html`
+      }
     }
 
-    //const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
-    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, "http://localhost:3000/games/").toString();
+    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
 
     const wrapper = document.createElement("div");
     wrapper.className = "game-container";
