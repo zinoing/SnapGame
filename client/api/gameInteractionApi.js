@@ -1,4 +1,4 @@
-let BASE_URL = "";
+let BASE_URL = "http://localhost:3000/api/interaction";
 
 if (typeof window !== "undefined") {
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -9,8 +9,6 @@ if (typeof window !== "undefined") {
   } else if (isLocalhost) {
     BASE_URL = "http://localhost:3000/api/interaction";
   }
-} else {
-  BASE_URL = "http://localhost:3000/api/interaction";
 }
 
 export async function likeGame(userId, gameId) {

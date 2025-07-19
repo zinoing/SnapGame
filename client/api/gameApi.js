@@ -1,4 +1,4 @@
-let BASE_URL = "";
+let BASE_URL = "http://localhost:3000/api/game";
 
 if (typeof window !== "undefined") {
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -9,8 +9,6 @@ if (typeof window !== "undefined") {
   } else if (isLocalhost) {
     BASE_URL = "http://localhost:3000/api/game";
   }
-} else {
-  BASE_URL = "http://localhost:3000/api/game";
 }
 
 export async function getGameInfo(gameId) {

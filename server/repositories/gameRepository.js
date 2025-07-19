@@ -13,11 +13,9 @@ exports.getGameList = async () => {
     SELECT 
       game_id AS gameId,
       name,
+      mode,
       level_count AS levels,
-      play_cost AS cost,
-      base_reward AS reward,
-      genre_tags AS tags,
-      total_play_count AS playCount
+      genre_tags AS tags
     FROM games
   `;
 
@@ -39,19 +37,8 @@ exports.getGameById = async (gameId) => {
   return rows[0];
 };
 
-exports.incrementPlayCount = async (gameId) => {
-  const sql = `UPDATE games SET play_count = play_count + 1 WHERE game_id = ?`;
-  await db.execute(sql, [gameId]);
-};
-
 exports.getTopGames = async (limit = 10) => {
   const sql = `SELECT * FROM games ORDER BY play_count DESC LIMIT ?`;
   const [rows] = await db.execute(sql, [limit]);
   return rows;
-};
-
-exports.getBaseReward = async (gameId) => {
-  const sql = `SELECT base_reward FROM games WHERE game_id = ?`;
-  const [rows] = await db.execute(sql, [gameId]);
-  return rows[0]?.base_reward ?? 0;
 };

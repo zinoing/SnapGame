@@ -1,4 +1,4 @@
-let BASE_URL = "";
+let BASE_URL = "http://localhost:3000/api/user";
 
 if (typeof window !== "undefined") {
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -9,22 +9,10 @@ if (typeof window !== "undefined") {
   } else if (isLocalhost) {
     BASE_URL = "http://localhost:3000/api/user";
   }
-} else {
-  BASE_URL = "http://localhost:3000/api/user";
 }
 
 export async function getUserCoins(userId) {
   const res = await fetch(`${BASE_URL}/${userId}/coins`);
   const data = await res.json();
   return data.coins; 
-}
-
-export async function updateUserCoins(userId, coinData) {
-  console.log("Sending coin update request", userId, coinData);
-  const res = await fetch(`${BASE_URL}/${userId}/coins`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(coinData),
-  });
-  return res.json();
 }

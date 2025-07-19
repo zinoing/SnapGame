@@ -5,24 +5,14 @@ INSERT IGNORE INTO games (
   name,
   description,
   level_count,
-  play_cost,
-  base_reward,
-  genre_tags,
-  total_play_count,
-  avg_clear_rate,
-  avg_play_time
+  genre_tags
 )
 VALUES (
   'time_stop',
   'time stop',
   'Stop the timer at the exact moment',
   3,
-  10,
-  20,
-  NULL,
-  0,
-  0,
-  0
+  NULL
 );
 
 INSERT IGNORE INTO levels (game_id, level_index, description)

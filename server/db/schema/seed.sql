@@ -4,89 +4,76 @@ INSERT IGNORE INTO users (
   user_id,
   password_hash,
   nickname,
-  coins,
-  total_play_time,
-  last_played_time,
-  double_choice_frequency,
-  level_attempts,
-  clear_rate,
-  play_hour_distribution,
-  avg_session_duration
+  coins
 )
 VALUES (
   'test123',
   '0000',
   'TestUser',
-  999999999,
-  0,
-  NULL,
-  0,
-  0,
-  0,
-  JSON_OBJECT(), 
-  0
+  999999999
 );
 
 INSERT IGNORE INTO games (
   game_id,
   name,
   description,
+  mode,
   level_count,
-  play_cost,
-  base_reward,
-  genre_tags,
-  total_play_count,
-  avg_clear_rate,
-  avg_play_time
+  genre_tags
 )
 VALUES (
-  'bottle_flip',
-  'bottle flip',
+  'bottle-flip',
+  'Bottle Flip',
   'Flip the bottle',
+  'level',
   3,
-  10,
-  20,
-  NULL,
-  0,
-  0,
-  0
+  NULL
 );
 
 INSERT IGNORE INTO games (
   game_id,
   name,
   description,
+  mode,
   level_count,
-  play_cost,
-  base_reward,
-  genre_tags,
-  total_play_count,
-  avg_clear_rate,
-  avg_play_time
+  genre_tags
 )
 VALUES (
-  'time_stop',
-  'time stop',
+  'time-stop',
+  'Time Stop',
   'Stop the timer at the exact moment',
-  5,
-  10,
-  20,
-  NULL,
-  0,
-  0,
-  0
+  'score',
+  1,
+  NULL
+);
+
+INSERT IGNORE INTO games (
+  game_id,
+  name,
+  description,
+  mode,
+  level_count,
+  genre_tags
+)
+VALUES (
+  'color-clash',
+  'Color Clash',
+  'Match the color to the word',
+  'score',
+  1,
+  NULL
 );
 
 INSERT IGNORE INTO levels (game_id, level_index, description)
 VALUES 
-  ('bottle_flip', 1, "Flip the bottle 1 time"),
-  ('bottle_flip', 2, "Flip the bottle 2 times"),
-  ('bottle_flip', 3, "Flip the bottle 3 times");
+  ('bottle-flip', 1, "Flip the bottle 1 time"),
+  ('bottle-flip', 2, "Flip the bottle 2 times"),
+  ('bottle-flip', 3, "Flip the bottle 3 times");
 
 INSERT IGNORE INTO levels (game_id, level_index, description)
 VALUES 
-  ('time_stop', 1, 'Stop the timer at exactly 5 seconds'),
-  ('time_stop', 2, 'Stop the timer at exactly 7 seconds'),
-  ('time_stop', 3, 'Stop the timer at exactly 5.0 seconds'),
-  ('time_stop', 4, 'Stop the timer at exactly 7.0 seconds'),
-  ('time_stop', 5, 'Stop the timer at exactly 7.00 seconds');
+  ('time-stop', 1, 'Stop the timer at the target second');
+
+INSERT IGNORE INTO levels (game_id, level_index, description)
+VALUES 
+  ('color-clash', 1, 'Score at least 5 points to pass!');
