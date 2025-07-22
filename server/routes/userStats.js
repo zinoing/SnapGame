@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const controller = require("../controllers/userGameStatsController");
+const UserGameStatsController = require('../controllers/userGameStatsController');
 
-router.post("/", controller.submitGameStats);
-router.get("/:userId/:gameId", controller.getGameStats);
+router.post('/log', UserGameStatsController.logGameSession);
+router.get('/:userId/history', UserGameStatsController.getUserGameHistory);
 
 module.exports = router;

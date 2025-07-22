@@ -5,7 +5,7 @@ export function getCurrentGameIdx() {
   return currentIndex;
 }
 
-export function getGameOrderByIdx(index) {
+export function getGameByIdx(index) {
   return gameOrder[index];
 }
 
@@ -15,15 +15,14 @@ export function getGameOrder() {
 
 export function setGameOrder(orderArray) {
   gameOrder = [...orderArray];
-  currentIndex = 0;
 }
 
-export function getNextGameIdx() {
+export function loadNextGame() {
   currentIndex = (currentIndex + 1) % gameOrder.length;
   return gameOrder[currentIndex];
 }
 
-export function getPreviousGameIdx() {
+export function loadPreviousGame() {
   currentIndex = (currentIndex - 1 + gameOrder.length) % gameOrder.length;
   return gameOrder[currentIndex];
 }

@@ -1,9 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const ctrl = require("../controllers/gameInteractionController");
+const GameInteractionController = require('../controllers/gameInteractionController');
 
-router.post("/like", ctrl.like);
-router.post("/unlike", ctrl.unlike);
-router.get("/:userId/likes", ctrl.getLikes);
+router.post('/like', GameInteractionController.likeGame);
+router.delete('/users/:userId/games/:gameId/like', GameInteractionController.unlikeGame);
+router.get('/user/:userId/likes', GameInteractionController.getLikedGamesByUser);
+
+router.post('/bookmark', GameInteractionController.bookmarkGame);
+router.delete('/users/:userId/games/:gameId/bookmark', GameInteractionController.unbookmarkGame);
+router.get('/user/:userId/bookmarks', GameInteractionController.getBookmarkedGamesByUser);
 
 module.exports = router;

@@ -1,112 +1,58 @@
 import { createInteractionIcons } from "../ui/interaction-ui.js";
-import { getGameManifestList } from "./load-gameList.js";
-import { getGameOrder } from "../user-state/gameOrder.js";
-import { getLevel, setLevel, resetLevel, incrementLevel } from "../user-state/level.js";
 
-//const GAME_BASE_URL = "https://snapgame.s3.ap-northeast-2.amazonaws.com/games/";
-const GAME_BASE_URL = "http://localhost:3000/games/";
+//const GAME_BASE_URL = `${window.SERVER_CONFIG?.GAME_BASE_URL || "http://localhost:3000"}/`;
+const GAME_BASE_URL = `https://snapgame.s3.ap-northeast-2.amazonaws.com/`;
 
-export async function loadTransition(gameIndex, levelIndex = 0) {
-  const gameList = getGameManifestList();
-  const game = gameList[gameIndex];
-  if (!game) {
-    console.error("❌ Invalid game index:", gameIndex);
-    return;
-  }
-
-  const gameId = game.gameId;
-  const transitionUrl = `${GAME_BASE_URL}${gameId}/level-map/level-map.html?level=${levelIndex}`;
-
-  const wrapper = document.createElement("div");
-  wrapper.className = "game-container";
-  wrapper.style.position = "relative";
-
-  const iframe = document.createElement("iframe");
-  iframe.id = "iframe";
-  iframe.src = transitionUrl;
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
-  iframe.style.border = "none";
-
-  wrapper.appendChild(iframe);
-
-  const feed = document.getElementById("feed");
-  if (!feed) return console.error("❌ #feed not found");
-
-  feed.innerHTML = "";
-  feed.appendChild(wrapper);
-
-  console.log(`⏳ Loaded transition screen for: ${gameId}`);
-}
-
-export async function loadGame(gameIndex, levelIndex = 0) {
-  const gameList = getGameManifestList();
-  const game =  gameList[gameIndex];
-  if (!game) {
-    console.error("❌ Invalid game index:", gameIndex);
-    return;
-  }
-
-  const gameId = game.gameId;
-  const manifestUrl = `${GAME_BASE_URL}${gameId}/manifest.json`;
-
+export async function loadGameAsync(game, isIntro) {
   try {
-    const res = await fetch(manifestUrl);
-    if (!res.ok) throw new Error("❌ manifest fetch 실패");
+    const entryUrl = buildEntryUrl(game, isIntro);
 
-    const manifest = await res.json();
-
-    let rawEntryPath = null;
-    if(levelIndex == 0) {
-      rawEntryPath = manifest.entry ?? "templates/intro.html";
-    }
-    else {
-      if(game.mode === 'level') {
-        rawEntryPath = `levels/level${levelIndex}/index.html`
-      }
-
-      if(game.mode === 'score') {
-        rawEntryPath = `templates/index.html`
-      }
-    }
-
-    const entryUrl = new URL(`${gameId}/${rawEntryPath}`, GAME_BASE_URL).toString();
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "game-container";
-    wrapper.style.position = "relative";
-
-    const iframe = document.createElement("iframe");
-    iframe.id = "iframe";
-    iframe.src = entryUrl;
-    iframe.style.width = "100%";
-    iframe.style.height = "100%";
-    iframe.style.border = "none";
-
-    const interactionIcons = await createInteractionIcons(gameId);
-    wrapper.appendChild(interactionIcons);
+    const wrapper = createGameWrapper();
+    const iframe = createIframe(entryUrl);
     wrapper.appendChild(iframe);
 
+    if(isIntro) {
+      const interactionIcons = await createInteractionIcons(game.id);
+      wrapper.appendChild(interactionIcons);
+    }
+    
     const feed = document.getElementById("feed");
-    if (!feed) return console.error("❌ #feed not found");
+    if (!feed) {
+      console.error("❌ #feed not found");
+      return;
+    }
 
     feed.innerHTML = "";
     feed.appendChild(wrapper);
 
-    console.log(`✅ Loaded game: ${gameId}`);
+    console.log(`✅ Loaded game: ${game.title}`);
   } catch (err) {
-    console.error("❌ loadGame failed:", err);
+    console.error("❌ loadGameAsync failed:", err);
   }
 }
 
-export async function loadNextLevel(gameIndex, levelIndex) {
-  const gameOrder = getGameOrder();
-  setLevel(levelIndex + 1);
-  await loadGame(gameOrder[gameIndex], getLevel());
+function buildEntryUrl(game, isIntro) {
+  if(isIntro) {
+    return new URL("../intro/intro.html", "http://localhost:3000").toString();
+  }
+  else {
+    return game.entry_url;
+  }
 }
 
-export async function loadPreviousLevel(gameIndex, levelIndex) {
-  const gameOrder = getGameOrder();
-  setLevel(levelIndex - 1);
-  await loadGame(gameOrder[gameIndex], getLevel());
+function createGameWrapper() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "game-container";
+  wrapper.style.position = "relative";
+  return wrapper;
+}
+
+function createIframe(src) {
+  const iframe = document.createElement("iframe");
+  iframe.id = "iframe";
+  iframe.src = src;
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  return iframe;
 }

@@ -1,22 +1,37 @@
-let BASE_URL = "http://localhost:3000/api/game";
+import { resolveBaseUrl } from "./baseUrl.js";
+import { apiFetch } from "./request.js";
 
-if (typeof window !== "undefined") {
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-
-  if (isAndroid) {
-    BASE_URL = "http://10.0.2.2:3000/api/game";
-  } else if (isLocalhost) {
-    BASE_URL = "http://localhost:3000/api/game";
-  }
-}
+const BASE_URL = resolveBaseUrl("games");
 
 export async function getGameInfo(gameId) {
-  const res = await fetch(`${BASE_URL}/${gameId}`);
-  return res.json();
+  return apiFetch(`${BASE_URL}/${gameId}`);
 }
 
 export async function getGameList() {
-  const res = await fetch(`${BASE_URL}/list`);
-  return res.json();
+  return apiFetch(`${BASE_URL}/list`);
+}
+
+export async function startGame(gameId) {
+  return apiFetch(`${BASE_URL}/start/${window.USER_CONFIG.USER_ID}/${gameId}`, {
+    method: "POST"
+  });
+}
+
+export async function endGame(sessionId) {
+  return apiFetch(`${BASE_URL}/end/${sessionId}`, {
+    method: "POST"
+  });
+}
+
+export async function submitGameResult({ sessionId, gameId, custom = null }) {
+  const userId = window.USER_CONFIG.USER_ID;
+  return apiFetch(`${BASE_URL}/result/${sessionId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId,
+      gameId,
+      custom
+    })
+  });
 }

@@ -1,43 +1,20 @@
-import { getGameList } from "../api/gameApi.js"
+import { getGameList } from "../api/gameApi.js";
 
-let gameManifestList = null;
+let gameInfoList = null;
 
 export async function initializeGameOrder() {
-  gameManifestList = await loadGameManifestList();
-  console.log("🎮 Loaded game list:", gameManifestList);
+  gameInfoList = await getGameList();
+  console.log("🎮 Loaded game list (before shuffle):", gameInfoList);
 
-  let gameOrder = Array.from({ length: gameManifestList.length }, (_, i) => i);
-  shuffle();
+  shuffleArray(gameInfoList);
+
+  const gameOrder = gameInfoList;
   return gameOrder;
 }
 
-function shuffle(gameOrder = []) {
-  for (let i = gameOrder.length - 1; i > 0; i--) {
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [gameOrder[i], gameOrder[j]] = [gameOrder[j], gameOrder[i]];
+    [array[i], array[j]] = [array[j], array[i]];
   }
-}
-
-export async function loadGameManifestList() {
-  const rawList = await getGameList();
-
-  const gameManifestList = rawList.map(game => {
-    const levels = [];
-
-    levels.push(`games/${game.gameId}/intro/intro.html`);
-    for (let i = 1; i <= game.levels; i++) {
-      levels.push(`games/${game.gameId}/level${i}/index.html`);
-    }
-
-    return {
-      ...game,
-      levels
-    };
-  });
-
-  return gameManifestList;
-}
-
-export function getGameManifestList() {
-  return gameManifestList;
 }

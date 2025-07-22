@@ -1,6 +1,7 @@
-import { loadGame } from "../core/load-game.js";
-import { getNextGameIdx, getPreviousGameIdx } from "../user-state/gameOrder.js";
-import { getLevel, setLevel } from "../user-state/level.js";
+import { loadGameAsync } from "../core/load-game.js";
+import { getCurrentGame, loadNextGame, loadPreviousGame } from "../user-state/gameOrder.js";
+import { getIsPlaying, setPlaying } from "../user-state/gameState.js";
+import { endGame } from "../api/gameApi.js";
 
 let touchStartY = 0;
 let touchEndY = 0;
@@ -27,25 +28,31 @@ async function onTouchEnd(e) {
 }
 
 async function onKeyDown(e) {
-  setLevel(0);
+  if(getIsPlaying()) {
+    setPlaying(false);
+    await endGame(sessionStorage.getItem("sessionId"));
+  }
 
   if (e.key === "ArrowUp") {
-    await loadGame(getPreviousGameIdx(), getLevel());
+    await loadGameAsync(loadPreviousGame(), true);
   } else if (e.key === "ArrowDown") {
-    await loadGame(getNextGameIdx(), getLevel());
+    await loadGameAsync(loadNextGame(), true);
   }
 }
 
 async function handleSwipeGesture() {
-  setLevel(0);
-
   const delta = touchStartY - touchEndY;
 
   if (Math.abs(delta) < 50) return;
 
   if (delta > 0) {
-      await loadGame(getNextGameIdx(), getLevel());
+      if(getIsPlaying()) {
+        setPlaying(false);
+        await endGame(getCurrentGame().id);
+      }
+
+      await loadGameAsync(loadNextGame(), true);
   } else {
-      await loadGame(getPreviousGameIdx(), getLevel());
+      await loadGameAsync(loadPreviousGame(), true);
   }
 }

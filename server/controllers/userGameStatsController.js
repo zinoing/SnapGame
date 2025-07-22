@@ -1,29 +1,25 @@
-const statsRepo = require("../repositories/userGameStatsRepository");
+const UserGameStatsRepository = require('../repositories/userGameStatsRepository');
 
-exports.submitGameStats = async (req, res) => {
-  const { userId, gameId, score, cleared } = req.body;
+const UserGameStatsController = {
+    logGameSession: async (req, res) => {
+        try {
+            const { userId, gameId, score } = req.body;
+            await UserGameStatsRepository.logGameSession(userId, gameId, score);
+            res.status(201).json({ message: 'Session logged.' });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to log game session.' });
+        }
+    },
 
-  if (!userId || !gameId) {
-    return res.status(400).json({ error: "Missing userId or gameId" });
-  }
-
-  try {
-    await statsRepo.upsertStats(userId, gameId, score, cleared);
-    res.status(200).json({ message: "Game stats updated" });
-  } catch (err) {
-    console.error("Error updating stats:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    getUserGameHistory: async (req, res) => {
+        try {
+            const { userId } = req.params;
+            const sessions = await UserGameStatsRepository.getUserGameHistory(userId);
+            res.json(sessions);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to retrieve game history.' });
+        }
+    }
 };
 
-exports.getGameStats = async (req, res) => {
-  const { userId, gameId } = req.params;
-
-  try {
-    const stats = await statsRepo.getStats(userId, gameId);
-    res.json(stats);
-  } catch (err) {
-    console.error("Error fetching stats:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+module.exports = UserGameStatsController;

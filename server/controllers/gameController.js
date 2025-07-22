@@ -1,65 +1,75 @@
-const gameRepo = require("../repositories/gameRepository");
-const { updateGameResult } = require("../utils/gameLogic");
+const GameRepository = require('../repositories/gameRepository');
 
-exports.createGame = async (req, res) => {
-  const { gameId, gameName, levelCount, genre } = req.body;
-  if (!gameId || !gameName || !levelCount || !genre) {
-    return res.status(400).json({ error: "Missing game info" });
-  }
+const GameController = {
+    createGame: async (req, res) => {
+        try {
+            const { title, description, thumbnailUrl, gameUrl, createdBy } = req.body;
+            const gameId = await GameRepository.createGame(title, description, thumbnailUrl, gameUrl, createdBy);
+            res.status(201).json({ gameId });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to create game.' });
+        }
+    },
 
-  try {
-    await gameRepo.createGame({ gameId, gameName, levelCount, genre });
-    res.status(201).json({ message: "Game created successfully" });
-  } catch (err) {
-    console.error("Error creating game:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+    startGame: async (req, res) => {
+        try {
+            const { userId, gameId } = req.params;
+            const { sessionId } = await GameRepository.startGame(userId, gameId);
 
-exports.getGame = async (req, res) => {
-  const { id } = req.params;
+            if (!sessionId) {
+                return res.status(500).json({ error: 'Failed to create session.' });
+            }
 
-  try {
-    const game = await gameRepo.getGameById(id);
-    if (!game) {
-      return res.status(404).json({ error: "Game not found" });
+            res.status(201).json({ sessionId });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to start game.' });
+        }
+    },
+
+    endGame: async (req, res) => {
+        try {
+            const { sessionId } = req.params;
+            const game = await GameRepository.endGame(sessionId);
+            if (!game) return res.status(404).json({ error: 'Game not found.' });
+            res.json(game);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to end game.' });
+        }
+    },
+
+    getGame: async (req, res) => {
+        try {
+            const { gameId } = req.params;
+            const game = await GameRepository.getGameById(gameId);
+            if (!game) return res.status(404).json({ error: 'Game not found.' });
+            res.json(game);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to fetch game.' });
+        }
+    },
+
+    listGames: async (req, res) => {
+        try {
+            const games = await GameRepository.listGames();
+            res.json(games);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to list games.' });
+        }
+    },
+
+    submitGameResult: async (req, res) => {
+        try {
+            const { sessionId } = req.params;
+            const { userId, gameId, custom } = req.body;
+
+            await GameRepository.endGame(sessionId);
+            const resultId = await GameRepository.submitGameResult(sessionId, userId, gameId, custom);
+
+            res.status(201).json({ resultId });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to submit game result.' });
+        }
     }
-    res.json(game);
-  } catch (err) {
-    console.error("Error getting game:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
 };
 
-exports.getGameList = async (req, res) => {
-  try {
-    const gameList = await gameRepo.getGameList();
-    res.json(gameList);
-  } catch (err) {
-    console.error("Error getting top games:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-exports.getTopGames = async (req, res) => {
-  try {
-    const topGames = await gameRepo.getTopGames(10);
-    res.json(topGames);
-  } catch (err) {
-    console.error("Error getting top games:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-exports.submitGameResult = async (req, res) => {
-  const { userId, reward } = req.body;
-  console.log("Game result for user:", userId);
-
-  try {
-    const result = await updateGameResult(userId, reward);
-    res.json(result);
-  } catch (err) {
-    console.error("Error updating game result:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+module.exports = GameController;

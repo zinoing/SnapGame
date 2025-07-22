@@ -1,44 +1,49 @@
-const db = require("../db/mysql");
+const db = require('../config/db/mysql.js');
 
-exports.createGame = async ({ gameId, gameName, levelCount, genre }) => {
-  const sql = `
-    INSERT INTO games (game_id, game_name, level_count, genre)
-    VALUES (?, ?, ?, ?)
-  `;
-  await db.execute(sql, [gameId, gameName, levelCount, genre]);
+const GameRepository = {
+    createGame: async (title, description, thumbnailUrl, gameUrl, createdBy) => {
+        const [result] = await db.execute(
+            'INSERT INTO games (title, description, thumbnail_url, game_url, created_by) VALUES (?, ?, ?, ?, ?)',
+            [title, description, thumbnailUrl, gameUrl, createdBy]
+        );
+        return result.insertId;
+    },
+
+    startGame: async (userId, gameId) => {
+    const [result] = await db.execute(
+        'INSERT INTO game_sessions (user_id, game_id) VALUES (?, ?)',
+        [userId, gameId]
+    );
+    return { sessionId: result.insertId };
+    },
+
+    endGame: async (sessionId, endedAt = new Date()) => {
+        const [result] = await db.execute(
+            'UPDATE game_sessions SET ended_at = ? WHERE id = ?',
+            [endedAt, sessionId]
+        );
+        return result.affectedRows > 0;
+    },
+
+    getGameById: async (gameId) => {
+        const [rows] = await db.execute('SELECT * FROM games WHERE id = ?', [gameId]);
+        return rows[0];
+    },
+
+    listGames: async () => {
+        const [rows] = await db.execute('SELECT * FROM games ORDER BY created_at DESC');
+        return rows;
+    },
+
+    submitGameResult: async (sessionId, userId, gameId, custom) => {
+        const [res] = await db.execute(
+            `INSERT INTO game_results (session_id, user_id, game_id, custom_json) 
+            VALUES (?, ?, ?, ?)`,
+            [sessionId, userId, gameId, JSON.stringify(custom)]
+        );
+        return res.insertId;
+    }
+
 };
 
-exports.getGameList = async () => {
-  const sql = `
-    SELECT 
-      game_id AS gameId,
-      name,
-      mode,
-      level_count AS levels,
-      genre_tags AS tags
-    FROM games
-  `;
-
-  const [rows] = await db.execute(sql);
-
-  return rows.map(game => ({
-    ...game,
-    tags: Array.isArray(game.tags)
-      ? game.tags
-      : typeof game.tags === "string"
-      ? JSON.parse(game.tags)
-      : [],
-  }));
-};
-
-exports.getGameById = async (gameId) => {
-  const sql = `SELECT * FROM games WHERE game_id = ?`;
-  const [rows] = await db.execute(sql, [gameId]);
-  return rows[0];
-};
-
-exports.getTopGames = async (limit = 10) => {
-  const sql = `SELECT * FROM games ORDER BY play_count DESC LIMIT ?`;
-  const [rows] = await db.execute(sql, [limit]);
-  return rows;
-};
+module.exports = GameRepository;
