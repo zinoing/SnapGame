@@ -55,20 +55,6 @@ const GameController = {
         } catch (error) {
             res.status(500).json({ error: 'Failed to list games.' });
         }
-    },
-
-    submitGameResult: async (req, res) => {
-        try {
-            const { sessionId } = req.params;
-            const { userId, gameId, custom } = req.body;
-
-            await GameRepository.endGame(sessionId);
-            const resultId = await GameRepository.submitGameResult(sessionId, userId, gameId, custom);
-
-            res.status(201).json({ resultId });
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to submit game result.' });
-        }
     }
 };
 

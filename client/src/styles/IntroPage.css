@@ -54,7 +54,7 @@ body, html {
   margin-bottom: 40px;
   padding: 16px 40px;
   font-size: 1.4rem;
-  background-color: #4a90e2;
+  background: linear-gradient(90deg, #F7B132, #FC4F1B);
   color: white;
   border: none;
   border-radius: 12px;

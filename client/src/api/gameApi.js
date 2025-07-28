@@ -22,16 +22,3 @@ export async function endGame(sessionId) {
     method: "POST"
   });
 }
-
-export async function submitGameResult({ sessionId, gameId, custom = null }) {
-  const userId = window.USER_CONFIG.USER_ID;
-  return apiFetch(`${BASE_URL}/result/${sessionId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId,
-      gameId,
-      custom
-    })
-  });
-}

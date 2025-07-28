@@ -4,7 +4,8 @@ import {
   loadNextGame,
   loadPreviousGame,
 } from "../hooks/useGameOrder";
-import { startGame, submitGameResult } from "../api/gameApi";
+import { startGame } from "../api/gameApi";
+import { submitGameResult } from "../api/userGameStatsApi";
 
 export function useIframeMessageHandler(setStep) {
   useEffect(() => {
@@ -29,6 +30,7 @@ export function useIframeMessageHandler(setStep) {
         case "DONE":
           try {
             const sessionId = sessionStorage.getItem("sessionId");
+            const userId = window.USER_CONFIG.USER_ID;
 
             if (!sessionId || !gameId) {
               console.error("Missing sessionId or gameId in DONE event");
@@ -37,6 +39,7 @@ export function useIframeMessageHandler(setStep) {
 
             await submitGameResult({
               sessionId,
+              userId,
               gameId,
               custom,
             });

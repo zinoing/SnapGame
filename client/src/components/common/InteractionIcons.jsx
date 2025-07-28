@@ -57,17 +57,17 @@ function InteractionIcons({ userId, gameId }) {
     }}>
       <button onClick={toggleLike} style={{ background: "transparent", border: "none" }}>
         <img
-          src={liked ? "/icons/like-filled.png" : "/icons/like-outline.png"}
+          src={liked ? "/icons/like-filled.svg" : "/icons/like-outline.svg"}
           alt="like"
-          style={{ width: "24px", height: "24px" }}
+          style={{ width: "30px", height: "30px" }}
         />
       </button>
 
       <button onClick={toggleBookmark} style={{ background: "transparent", border: "none" }}>
         <img
-          src={bookmarked ? "/icons/bookmark-filled.png" : "/icons/bookmark-outline.png"}
+          src={bookmarked ? "/icons/bookmark-filled.svg" : "/icons/bookmark-outline.svg"}
           alt="bookmark"
-          style={{ width: "24px", height: "24px" }}
+          style={{ width: "30px", height: "30px" }}
         />
       </button>
 

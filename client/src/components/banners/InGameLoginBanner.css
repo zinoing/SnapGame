@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 40px;
-  background: linear-gradient(90deg, #7b5bff, #846aff);
+  background: linear-gradient(90deg, #F7B132, #FC4F1B);
   color: white;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@
 
 .login-banner-btn {
   background-color: white;
-  color: #633CFF;
+  color: #F8942B;
   border: none;
   border-radius: 20px;
   font-size: 13px;

@@ -1,7 +1,7 @@
 import React from "react";
-import "./LoginBanner.css";
+import "./InGameLoginBanner.css";
 
-function LoginBanner({ onLogin, onClose }) {
+function InGameLoginBanner({ onLogin, onClose }) {
   return (
     <div className="login-banner">
         <span className="login-message">Don't lose your progress!</span>
@@ -13,4 +13,4 @@ function LoginBanner({ onLogin, onClose }) {
   );
 }
 
-export default LoginBanner;
+export default InGameLoginBanner;

@@ -6,7 +6,6 @@ router.post('/', GameController.createGame);
 router.get('/list', GameController.listGames);
 router.post('/start/:userId/:gameId', GameController.startGame);
 router.post('/end/:sessionId', GameController.endGame);
-router.post('/result/:sessionId', GameController.submitGameResult);
 router.get('/:gameId', GameController.getGame);
 
 module.exports = router;

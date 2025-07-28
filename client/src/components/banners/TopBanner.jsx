@@ -7,8 +7,12 @@ function TopBanner({ onHeartClick, onProfileClick }) {
       <img src="/logo/logo_all_white.svg" alt="Logo" className="logo-img" />
 
       <div className="top-banner-actions">
-        <button className="icon-btn" onClick={onHeartClick}>❤️</button>
-        <button className="icon-btn" onClick={onProfileClick}>👤</button>
+        <button className="icon-btn" onClick={onHeartClick}>
+          <img src="/icons/game.svg" alt="Game" className="icon-img" />
+        </button>
+        <button className="icon-btn" onClick={onProfileClick}>
+          <img src="/icons/profile.svg" alt="Profile" className="icon-img" />
+        </button>
       </div>
     </div>
   );

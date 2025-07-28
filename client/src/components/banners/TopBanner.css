@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px 0 16px;
+  padding: 0 20px 0 16px;
   z-index: 1000;
 }
 
@@ -21,6 +21,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  transform: translateY(2px);
 }
 
 .icon-btn {
@@ -29,4 +30,10 @@
   color: white;
   font-size: 20px;
   cursor: pointer;
+}
+
+.icon-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }

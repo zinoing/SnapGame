@@ -8,7 +8,7 @@ import InteractionIcons from "../components/common/InteractionIcons";
 import TopBanner from "../components/banners/TopBanner";
 import MyPanel from "../components/panels/MyPanel";
 import InGameTopBanner from "../components/banners/InGameTopBanner";
-import LoginBanner from "../components/banners/LoginBanner";
+import InGameLoginBanner from "../components/banners/InGameLoginBanner";
 import LoginPanel from "../components/panels/LoginPanel";
 import { endGame } from "../api/gameApi";
 
@@ -90,7 +90,7 @@ function GameFeedPage() {
             await endGame(sessionId);
             }} />
           {showLoginBanner && (
-            <LoginBanner
+            <InGameLoginBanner
               onLogin={() => {
                 setStep("intro");
                 setShowLoginPanel(true);
