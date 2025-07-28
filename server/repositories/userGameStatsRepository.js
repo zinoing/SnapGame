@@ -1,16 +1,25 @@
 const db = require('../config/db/mysql.js');
 
 const UserGameStatsRepository = {
-    logGameSession: async (userId, gameId, score) => {
-        await db.execute(
-            'INSERT INTO game_sessions (user_id, game_id, score, ended_at) VALUES (?, ?, ?, NOW())',
-            [userId, gameId, score]
+    getUserLikedGames: async (userId) => {
+        const [rows] = await db.execute(
+            'SELECT * FROM game_likes WHERE user_id = ?',
+            [userId]
         );
+        return rows;
+    },
+
+    getUserBookmarkedGames: async (userId) => {
+        const [rows] = await db.execute(
+            'SELECT * FROM game_bookmarks WHERE user_id = ?',
+            [userId]
+        );
+        return rows;
     },
 
     getUserGameHistory: async (userId) => {
         const [rows] = await db.execute(
-            'SELECT * FROM game_sessions WHERE user_id = ? ORDER BY started_at DESC',
+            'SELECT * FROM game_history WHERE user_id = ?',
             [userId]
         );
         return rows;

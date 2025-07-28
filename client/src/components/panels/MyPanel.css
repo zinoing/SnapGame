@@ -1,0 +1,76 @@
+.my-panel-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-panel {
+  width: 90%;
+  max-width: 400px;
+  background: #1c1c1e;
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative; 
+}
+
+.my-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.my-panel-tabs {
+  display: flex;
+  margin-top: 16px;
+  border-bottom: 1px solid #333;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 0;
+  color: #888;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+}
+
+.tab-btn.active {
+  color: white;
+  border-bottom: 2px solid #8a4cff;
+}
+
+.my-panel-content {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.game-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.game-list-item {
+  color: white;
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+  font-size: 14px;
+}

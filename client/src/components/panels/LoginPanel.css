@@ -1,0 +1,108 @@
+.login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.login-container {
+  background-color: #181a23;
+  color: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.close-panel-btn {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.login-panel-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-btn.google { background-color: #fff; color: #444; }
+.login-btn.facebook { background-color: #1877F2; color: #fff; }
+.login-btn.apple { background-color: #fff; color: #000; }
+
+.separator {
+  margin: 20px 0 10px;
+  color: #aaa;
+}
+
+.email-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background-color: #2a2d38;
+  color: white;
+}
+
+.continue-login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  border: none;
+  border-radius: 8px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.inquiry-btn {
+  margin-top: 20px;
+  padding: 8px 12px;
+  background-color: #2a2d38;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: 500;
+}
+
+.language-select {
+  margin-top: 16px;
+  padding: 8px;
+  background-color: #2a2d38;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+.footer-links {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 16px;
+  line-height: 1.4;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 20px;
+}

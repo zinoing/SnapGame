@@ -1,22 +1,5 @@
 USE snapgame;
 
-INSERT INTO users (
-    id,
-    username,
-    email,
-    password_hash,
-    created_at,
-    last_login
-) VALUES (
-    'testuser',
-    'testuser',
-    'testuser@example.com',
-    '9c9c5c3cf718b0d70e6f9cabb53ccad5f4b7582c91f957859a8e3df5f70a5f6d',
-    NOW(),
-    NULL
-);
-
-
 INSERT INTO games (
     id,
     title,
@@ -29,10 +12,10 @@ INSERT INTO games (
     'bottle-flip',
     'Bottle Flip',
     'Flip the bottle',
-    '/games/bottle-flip/',
-    '/games/bottle-flip/assets/intro-background.png',
-    '/games/bottle-flip/templates/index.html',
-    'testuser'                                       
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/bottle-flip/',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/bottle-flip/assets/intro-background.png',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/bottle-flip/templates/index.html',
+    'developer'                                       
 );
 
 INSERT INTO games (
@@ -47,10 +30,10 @@ INSERT INTO games (
     'color-clash',
     'Color Clash',
     'Find the right color and text',
-    '/games/color-clash/',
-    '/games/color-clash/assets/intro-background.png',
-    '/games/color-clash/templates/index.html',
-    'testuser'                                       
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/color-clash/',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/color-clash/assets/intro-background.png',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/color-clash/templates/index.html',
+    'developer'                                       
 );
 
 
@@ -66,8 +49,8 @@ INSERT INTO games (
     'time-stop',
     'Time Stop',
     'Stop the timer at the target second',
-    '/games/time-stop/',
-    '/games/time-stop/assets/intro-background.png',
-    '/games/time-stop/templates/index.html',
-    'testuser'                                       
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/time-stop/',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/time-stop/assets/intro-background.png',
+    'https://snapgame.s3.ap-northeast-2.amazonaws.com/games/time-stop/templates/index.html',
+    'developer'                                       
 );

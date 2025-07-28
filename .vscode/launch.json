@@ -17,10 +17,16 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against 10.0.2.2",
-            //"url": "http://10.0.2.2:3000/index.html",
-            "url": "http://localhost:3000/index.html",
-            "webRoot": "${workspaceFolder}\\client"
+            "name": "Client",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "React App (Chrome)",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/client"
         }
     ]
 }

@@ -10,11 +10,35 @@ const GameRepository = {
     },
 
     startGame: async (userId, gameId) => {
-    const [result] = await db.execute(
-        'INSERT INTO game_sessions (user_id, game_id) VALUES (?, ?)',
-        [userId, gameId]
-    );
-    return { sessionId: result.insertId };
+        const conn = await db.getConnection();
+
+        try {
+            await conn.beginTransaction();
+
+            const [result] = await conn.execute(
+                'INSERT INTO game_sessions (user_id, game_id) VALUES (?, ?)',
+                [userId, gameId]
+            );
+
+            await conn.execute(
+                `INSERT INTO game_history (user_id, game_id, total_play_count, last_played_at)
+                VALUES (?, ?, 1, NOW())
+                ON DUPLICATE KEY UPDATE 
+                    total_play_count = total_play_count + 1,
+                    last_played_at = NOW();`,
+                [userId, gameId]
+            );
+
+            await conn.commit();
+
+            return { sessionId: result.insertId };
+        } catch (err) {
+            await conn.rollback();
+            console.error("🔥 gameHistory INSERT 실패:", err); 
+            throw err;
+        } finally {
+            conn.release();
+        }
     },
 
     endGame: async (sessionId, endedAt = new Date()) => {

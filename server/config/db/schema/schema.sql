@@ -6,10 +6,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    id VARCHAR(64) PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(100),
+    password_hash VARCHAR(255),
+    is_guest BOOLEAN DEFAULT FALSE,
+    expires_at DATETIME NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_login DATETIME
 );
@@ -24,8 +26,7 @@ CREATE TABLE games (
     thumbnail_url VARCHAR(255),
     entry_url VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    created_by VARCHAR(100),
-    FOREIGN KEY (created_by) REFERENCES users(id)
+    created_by VARCHAR(64)
 );
 
 DROP TABLE IF EXISTS game_results;
@@ -33,7 +34,7 @@ DROP TABLE IF EXISTS game_results;
 CREATE TABLE game_results (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   session_id BIGINT,
-  user_id VARCHAR(64) NOT NULL,
+  user_id BIGINT NOT NULL,
   game_id VARCHAR(64) NOT NULL,
   custom_json JSON,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -44,7 +45,7 @@ DROP TABLE IF EXISTS game_sessions;
 
 CREATE TABLE game_sessions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(64) NOT NULL,
+    user_id BIGINT NOT NULL,
     game_id VARCHAR(64) NOT NULL,
     started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     ended_at DATETIME,
@@ -55,7 +56,7 @@ CREATE TABLE game_sessions (
 DROP TABLE IF EXISTS game_likes;
 
 CREATE TABLE game_likes (
-  user_id VARCHAR(64),
+  user_id BIGINT,
   game_id VARCHAR(64),
   liked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id, game_id),
@@ -66,7 +67,7 @@ CREATE TABLE game_likes (
 DROP TABLE IF EXISTS game_bookmarks;
 
 CREATE TABLE game_bookmarks (
-    user_id VARCHAR(64),
+    user_id BIGINT,
     game_id VARCHAR(64),
     bookmarked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, game_id),
@@ -74,15 +75,14 @@ CREATE TABLE game_bookmarks (
     FOREIGN KEY (game_id) REFERENCES games(id)
 );
 
-DROP TABLE IF EXISTS recommendation_logs;
+DROP TABLE IF EXISTS game_history;
 
-CREATE TABLE recommendation_logs (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(64),
-    game_id VARCHAR(64),
-    algorithm_name VARCHAR(100),
-    served_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    clicked BOOLEAN,
+CREATE TABLE game_history (
+    user_id BIGINT,
+    game_id VARCHAR(64) NOT NULL,
+    total_play_count INT DEFAULT 1,
+    last_played_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, game_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (game_id) REFERENCES games(id)
 );

@@ -1,21 +1,31 @@
 const UserGameStatsRepository = require('../repositories/userGameStatsRepository');
 
 const UserGameStatsController = {
-    logGameSession: async (req, res) => {
+    getUserLikedGames: async (req, res) => {
         try {
-            const { userId, gameId, score } = req.body;
-            await UserGameStatsRepository.logGameSession(userId, gameId, score);
-            res.status(201).json({ message: 'Session logged.' });
+            const { userId } = req.params;
+            const games = await UserGameStatsRepository.getUserLikedGames(userId);
+            res.json(games);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to log game session.' });
+            res.status(500).json({ error: 'Failed to retrieve game history.' });
+        }
+    },
+
+    getUserBookmarkedGames: async (req, res) => {
+        try {
+            const { userId } = req.params;
+            const games = await UserGameStatsRepository.getUserBookmarkedGames(userId);
+            res.json(games);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to retrieve game history.' });
         }
     },
 
     getUserGameHistory: async (req, res) => {
         try {
             const { userId } = req.params;
-            const sessions = await UserGameStatsRepository.getUserGameHistory(userId);
-            res.json(sessions);
+            const games = await UserGameStatsRepository.getUserGameHistory(userId);
+            res.json(games);
         } catch (error) {
             res.status(500).json({ error: 'Failed to retrieve game history.' });
         }
