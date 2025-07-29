@@ -5,6 +5,7 @@ import {
   loadPreviousGame,
 } from "../hooks/useGameOrder";
 import { startGame } from "../api/gameApi";
+import { getUserInfo } from "../api/userApi";
 import { submitGameResult } from "../api/userGameStatsApi";
 
 export function useIframeMessageHandler(setStep) {
@@ -15,14 +16,22 @@ export function useIframeMessageHandler(setStep) {
 
       switch (type) {
         case "REQUEST_GAME_STATE":
+          let custom = null;
+
+          if(!window.USER_CONFIG.IS_GUEST) {
+            const user = await getUserInfo(window.USER_CONFIG.USER_ID);
+            custom = user.custom;
+          }
+
           iframe?.contentWindow?.postMessage(
-            { type: "INIT_GAME_STATE",
-              gameId: getCurrentGame().id,
-             },
+            { 
+              type: "INIT_GAME_STATE",
+              custom: custom
+            },
             "*"
           );
 
-          const response = await startGame(getCurrentGame().id);
+          const response = await startGame(gameId);
           const sessionId = response.sessionId;
           sessionStorage.setItem("sessionId", sessionId);
           break;

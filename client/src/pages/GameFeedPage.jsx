@@ -41,6 +41,10 @@ function GameFeedPage() {
           <MyPanel
             visible={showMyPanel}
             onClose={() => setShowMyGamePanel(false)}
+            onSelectGame={(game) => {
+              setMemoizedGame(game);
+              setStep("play");
+            }}
           />
 
           {showLoginPanel && (
@@ -54,21 +58,7 @@ function GameFeedPage() {
               className="game-banner"
               style={{ backgroundImage: `url(${memoizedGame.thumbnail_url})` }}
             >
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100vw",
-                  height: "100vh",
-                  backgroundColor: "rgba(0, 0, 0, 0.3)",
-                  pointerEvents: "none",
-                  zIndex: 1,
-                }}
-              />
               <div className="game-info" style={{ position: "relative" }}>
-                <h1 id="game-name">{memoizedGame.title}</h1>
-                <p id="game-description">{memoizedGame.description}</p>
                 <InteractionIcons
                   userId={window.USER_CONFIG?.USER_ID}
                   gameId={memoizedGame.id}

@@ -33,10 +33,10 @@ const UserGameStatsRepository = {
         return result.affectedRows > 0;
     },
 
-    getGameResult: async (sessionId) => {
+    getGameResult: async (userId, gameId) => {
         const [rows] = await db.execute(
-            'SELECT FROM game_results WHERE sessionId = ?',
-            [sessionId]
+            'SELECT FROM game_results WHERE user_id = ? and game_id = ?',
+            [userId, gameId]
         );
         return rows;
     },

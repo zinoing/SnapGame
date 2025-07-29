@@ -8,7 +8,7 @@ router.get('/history/:userId', UserGameStatsController.getUserGameHistory);
 
 router.delete('/history/:userId/:gameId', UserGameStatsController.deleteGameHistory);
 
-router.get('/result/:sessionId', UserGameStatsController.getGameResult);
-router.post('/result/:sessionId', UserGameStatsController.submitGameResult);
+router.get('/result/:userId/:gameId', UserGameStatsController.getGameResult);
+router.post('/result', UserGameStatsController.submitGameResult);
 
 module.exports = router;

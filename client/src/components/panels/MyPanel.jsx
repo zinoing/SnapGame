@@ -8,66 +8,84 @@ import {
 } from "../../api/userGameStatsApi";
 import {
   unlikeGame,
-  unbookmarkGame
+  unbookmarkGame,
 } from "../../api/gameInteractionApi";
-import { getGameInfo } from "../../api/gameApi"
+import { getGameInfo } from "../../api/gameApi";
+import GameContainer from "../game/GameContainer";
 
 const TAB_LABELS = ["Recent", "Bookmarks", "Likes"];
 
-function MyPanel({ visible, onClose }) {
+function MyPanel({ visible, onClose, onSelectGame }) {
   const [activeTab, setActiveTab] = useState("Recent");
   const [gameList, setGameList] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async (userId) => {
+  const fetchGameList = async () => {
     setLoading(true);
     let rawList = [];
 
+    const userId = window.USER_CONFIG.USER_ID;
+
     try {
-      if (activeTab === "Recent") {
-        rawList = await getGameHistory(userId);
-      } else if (activeTab === "Bookmarks") {
-        rawList = await getBookmarkedGames(userId);
-      } else if (activeTab === "Likes") {
-        rawList = await getLikedGames(userId);
+      switch (activeTab) {
+        case "Recent":
+          rawList = await getGameHistory(userId);
+          break;
+        case "Bookmarks":
+          rawList = await getBookmarkedGames(userId);
+          break;
+        case "Likes":
+          rawList = await getLikedGames(userId);
+          break;
+        default:
+          break;
       }
 
-      const enrichedList = await Promise.all(
+      const enriched = await Promise.all(
         rawList.map(async (entry) => {
           const info = await getGameInfo(entry.game_id);
-          return {
-            ...info,
-          };
+          return { ...info };
         })
       );
 
-      setGameList(enrichedList);
+      setGameList(enriched);
     } catch (err) {
       console.error("📛 Failed to fetch user game stats:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    if (!visible) return;
-    fetchData(window.USER_CONFIG.USER_ID);
+    if (visible) {
+      fetchGameList();
+    }
   }, [activeTab, visible]);
 
-
-  const handleRemove = async (userId, gameId) => {
+  const handleRemove = async (gameId) => {
     try {
-      if (activeTab === "Recent") {
-        await deleteGameHistory(userId, gameId);
-      } else if (activeTab === "Bookmarks") {
-        await unbookmarkGame(userId, gameId);
-      } else if (activeTab === "Likes") {
-        await unlikeGame(userId, gameId);
+      switch (activeTab) {
+        case "Recent":
+          await deleteGameHistory(userId, gameId);
+          break;
+        case "Bookmarks":
+          await unbookmarkGame(userId, gameId);
+          break;
+        case "Likes":
+          await unlikeGame(userId, gameId);
+          break;
+        default:
+          break;
       }
-      fetchData(userId);
+      fetchGameList();
     } catch (err) {
       console.error("❌ Failed to remove game:", err);
     }
+  };
+
+  const handleSelect = (game) => {
+    onSelectGame?.(game);
   };
 
   if (!visible) return null;
@@ -75,13 +93,15 @@ function MyPanel({ visible, onClose }) {
   return (
     <div className="my-panel-overlay">
       <div className="my-panel">
+        {/* Header */}
         <div className="my-panel-header">
           <h2>My Games</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
+        {/* Tabs */}
         <div className="my-panel-tabs">
-          {TAB_LABELS.map(label => (
+          {TAB_LABELS.map((label) => (
             <button
               key={label}
               className={`tab-btn ${activeTab === label ? "active" : ""}`}
@@ -92,6 +112,7 @@ function MyPanel({ visible, onClose }) {
           ))}
         </div>
 
+        {/* Game List */}
         <div className="my-panel-content">
           {loading ? (
             <p>Loading...</p>
@@ -104,12 +125,22 @@ function MyPanel({ visible, onClose }) {
           ) : (
             <div className="game-card-grid">
               {gameList.map((game) => (
-                <div key={game.id} 
-                     className="game-card"
-                     style={{ backgroundImage: `url(${game.thumbnail_url})` }}
+                <button
+                  key={game.id}
+                  className="game-card"
+                  style={{ backgroundImage: `url(${game.thumbnail_url})` }}
+                  onClick={() => handleSelect(game)}
                 >
-                  <button className="remove-btn" onClick={() => handleRemove(window.USER_CONFIG.USER_ID, game.id)}>✖</button>
-                </div>
+                  <span
+                    className="remove-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemove(game.id);
+                    }}
+                  >
+                    ✖
+                  </span>
+                </button>
               ))}
             </div>
           )}

@@ -20,6 +20,10 @@ export async function createUser(username, email, passwordHash, isGuest = false,
   });
 }
 
+export async function getUserInfo(userId) {
+  return apiFetch(`${BASE_URL}/${userId}`);
+}
+
 export async function createGuestUser() {
   const guestName = `Guest-${uuidv4().slice(0, 8)}`;
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);

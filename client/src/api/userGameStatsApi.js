@@ -22,15 +22,16 @@ export async function deleteGameHistory(userId, gameId) {
   });
 }
 
-export async function getGameResult({ sessionId }) {
-  return apiFetch(`${BASE_URL}/result/${sessionId}`);
+export async function getGameResult({ userId, gameId }) {
+  return apiFetch(`${BASE_URL}/result/${userId}/${gameId}`);
 }
 
 export async function submitGameResult({ sessionId, userId, gameId, custom = null }) {
-  return apiFetch(`${BASE_URL}/result/${sessionId}`, {
+  return apiFetch(`${BASE_URL}/result}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      sessionId,
       userId,
       gameId,
       custom

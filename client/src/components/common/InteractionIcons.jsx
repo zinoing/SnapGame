@@ -47,7 +47,7 @@ function InteractionIcons({ userId, gameId }) {
   return (
     <div style={{
       position: "absolute",
-      top: "70%",
+      top: "50%",
       right: "3px",
       transform: "translateY(-50%)",
       display: "flex",

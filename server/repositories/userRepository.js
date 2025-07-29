@@ -30,6 +30,11 @@ const UserRepository = {
         return result.affectedRows > 0;
     },
 
+    getUserById: async (userId) => {
+        const [rows] = await db.execute('SELECT * FROM users WHERE id = ?', [userId]);
+        return rows[0];
+    },
+
     getUserByEmail: async (email) => {
         const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         return rows[0];

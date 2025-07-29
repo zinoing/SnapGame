@@ -44,8 +44,8 @@ const UserGameStatsController = {
 
     getGameResult: async (req, res) => {
         try {
-            const { sessionId } = req.params;
-            const gameResult = await UserGameStatsRepository.getGameResult(sessionId);
+            const { userId, gameId } = req.params;
+            const gameResult = await UserGameStatsRepository.getGameResult(userId, gameId);
             res.json(gameResult);
         } catch (error) {
             res.status(500).json({ error: 'Failed to retrieve game result.' });
@@ -54,8 +54,7 @@ const UserGameStatsController = {
     
     submitGameResult: async (req, res) => {
         try {
-            const { sessionId } = req.params;
-            const { userId, gameId, custom } = req.body;
+            const { sessionId, userId, gameId, custom } = req.body;
 
             await GameRepository.endGame(sessionId);
             const resultId = await UserGameStatsRepository.submitGameResult(sessionId, userId, gameId, custom);
