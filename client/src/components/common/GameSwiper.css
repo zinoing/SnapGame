@@ -1,0 +1,65 @@
+.swiper-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.game-slot {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transition: transform 0.3s ease;
+}
+
+.game-slot.active {
+  z-index: 2;
+}
+
+.game-slot.inactive {
+  z-index: 1;
+}
+
+.game-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  color: white;
+  font-family: 'Helvetica', sans-serif;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.game-info {
+  margin-top: auto;
+  margin-bottom: 60px;
+  text-align: center;
+  z-index: 2;
+}
+
+#play-button {
+  align-self: center;
+  margin-top: 80%;
+  padding: 16px 40px;
+  font-size: 1.4rem;
+  background: linear-gradient(90deg, #F7B132, #FC4F1B);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: background-color 0.3s;
+  z-index: 2;
+  position: relative;
+}

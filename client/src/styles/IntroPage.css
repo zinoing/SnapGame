@@ -7,55 +7,8 @@ body, html {
   background-color: black;
 }
 
-.game-banner {
-  height: calc(100vh - 60px);
-  margin-top: 60px;
-  width: 100vw;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 24px;
-  box-sizing: border-box;
-  color: white;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-}
-
 .icon {
   width: 24px;
   height: 24px;
   margin-right: 6px;
-}
-
-.game-info {
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-#play-button {
-  align-self: center;
-  margin-top: 80%;
-  padding: 16px 40px;
-  font-size: 1.4rem;
-  background: linear-gradient(90deg, #F7B132, #FC4F1B);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: background-color 0.3s;
-  z-index: 2;
-  position: relative;
-}
-
-#play-button:hover:enabled {
-  background-color: #357bd8;
-}
-
-#play-button:disabled {
-  background-color: gray;
-  cursor: not-allowed;
 }

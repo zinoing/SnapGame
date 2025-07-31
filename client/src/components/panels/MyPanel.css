@@ -24,7 +24,7 @@
   align-items: center;
 }
 
-.close-btn {
+.my-panel-close-btn {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -41,7 +41,7 @@
   border-bottom: 1px solid #333;
 }
 
-.tab-btn {
+.my-panel-tab-btn {
   flex: 1;
   padding: 8px 0;
   color: #888;
@@ -50,7 +50,7 @@
   font-size: 14px;
 }
 
-.tab-btn.active {
+.my-panel-tab-btn.active {
   color: white;
   border-bottom: 2px solid #F8942B;
 }
@@ -62,20 +62,20 @@
   color: #ccc;
 }
 
-.game-list {
+.my-panel-game-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.game-list-item {
+.my-panel-game-list-item {
   color: white;
   padding: 8px 0;
   border-bottom: 1px solid #444;
   font-size: 14px;
 }
 
-.game-card-grid {
+.my-panel-game-card-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -83,7 +83,7 @@
   justify-content: center;
 }
 
-.game-card {
+.my-panel-game-card {
   position: relative;
   width: 100px;
   height: 140px;
@@ -99,7 +99,7 @@
   overflow: hidden;
 }
 
-.remove-btn {
+.my-panel-remove-btn {
   position: absolute;
   top: 6px;
   right: 6px;

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useSwipeUI } from "../hooks/useSwipeUI";
 import { useIframeMessageHandler } from "../hooks/useIframeMessage";
-import { getCurrentGame } from "../hooks/useGameOrder";
+import {
+  getCurrentGame,
+  getNextGame,
+  getPreviousGame,
+  loadNextGame,
+  loadPreviousGame,
+} from "../hooks/useGameOrder";
 import GameContainer from "../components/game/GameContainer";
 import InteractionIcons from "../components/common/InteractionIcons";
 import TopBanner from "../components/banners/TopBanner";
@@ -10,22 +15,36 @@ import MyPanel from "../components/panels/MyPanel";
 import InGameTopBanner from "../components/banners/InGameTopBanner";
 import InGameLoginBanner from "../components/banners/InGameLoginBanner";
 import LoginPanel from "../components/panels/LoginPanel";
+import GameSwiper from "../components/common/GameSwiper";
 import { endGame } from "../api/gameApi";
+
+function getGameState() {
+  return {
+    prev: getPreviousGame(), 
+    current: getCurrentGame(),
+    next: getNextGame(),
+  };
+}
 
 function GameFeedPage() {
   const location = useLocation();
   const initialGame = location.state?.game || getCurrentGame();
 
   const [step, setStep] = useState("intro");
-  const [memoizedGame, setMemoizedGame] = useState(initialGame);
   const [showMyPanel, setShowMyGamePanel] = useState(false);
   const [showLoginBanner, setShowLoginBanner] = useState(true);
   const [showLoginPanel, setShowLoginPanel] = useState(false);
 
-  useSwipeUI((game) => {
-    setMemoizedGame(game);
-    setStep("intro");
-  }, step);
+  const [memoizedGame, setMemoizedGame] = useState(initialGame);
+  const [gameState, setGameState] = useState(getGameState());
+
+  const handleSwipe = (dir) => {
+    if (dir === "up") loadNextGame();
+    else loadPreviousGame();
+
+    const updated = getGameState();
+    setGameState(updated); 
+  };
 
   useIframeMessageHandler(setStep);
 
@@ -53,22 +72,10 @@ function GameFeedPage() {
             />
           )}
 
-          <div className="intro-page">
-            <div
-              className="game-banner"
-              style={{ backgroundImage: `url(${memoizedGame.thumbnail_url})` }}
-            >
-              <div className="game-info" style={{ position: "relative" }}>
-                <InteractionIcons
-                  userId={window.USER_CONFIG?.USER_ID}
-                  gameId={memoizedGame.id}
-                />
-                <button id="play-button" onClick={() => setStep("play")}>
-                  ▶ Play
-                </button>
-              </div>
-            </div>
-          </div>
+          <GameSwiper
+            gameState={gameState}
+            onSwipe={handleSwipe}
+          />
         </>
       )}
 

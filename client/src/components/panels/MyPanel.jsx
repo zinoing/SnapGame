@@ -11,14 +11,12 @@ import {
   unbookmarkGame,
 } from "../../api/gameInteractionApi";
 import { getGameInfo } from "../../api/gameApi";
-import GameContainer from "../game/GameContainer";
 
 const TAB_LABELS = ["Recent", "Bookmarks", "Likes"];
 
 function MyPanel({ visible, onClose, onSelectGame }) {
   const [activeTab, setActiveTab] = useState("Recent");
   const [gameList, setGameList] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchGameList = async () => {
@@ -96,7 +94,7 @@ function MyPanel({ visible, onClose, onSelectGame }) {
         {/* Header */}
         <div className="my-panel-header">
           <h2>My Games</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="my-panel-close-btn" onClick={onClose}>✕</button>
         </div>
 
         {/* Tabs */}
@@ -104,7 +102,7 @@ function MyPanel({ visible, onClose, onSelectGame }) {
           {TAB_LABELS.map((label) => (
             <button
               key={label}
-              className={`tab-btn ${activeTab === label ? "active" : ""}`}
+              className={`my-panel-tab-btn ${activeTab === label ? "active" : ""}`}
               onClick={() => setActiveTab(label)}
             >
               {label}
@@ -123,16 +121,16 @@ function MyPanel({ visible, onClose, onSelectGame }) {
               {activeTab === "Likes" && "No liked games yet."}
             </p>
           ) : (
-            <div className="game-card-grid">
+            <div className="my-panel-game-card-grid">
               {gameList.map((game) => (
                 <button
                   key={game.id}
-                  className="game-card"
+                  className="my-panel-game-card"
                   style={{ backgroundImage: `url(${game.thumbnail_url})` }}
                   onClick={() => handleSelect(game)}
                 >
                   <span
-                    className="remove-btn"
+                    className="my-panel-remove-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemove(game.id);
