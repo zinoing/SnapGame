@@ -35,7 +35,7 @@ export default function GameSwiper({ gameState, onSwipe }) {
   const handleTouchEnd = () => {
     if (isAnimating) return;
 
-    const threshold = window.innerHeight / 2;
+    const threshold = window.innerHeight * 0.3;
     const direction = deltaY.current < 0 ? "up" : "down";
 
     if (Math.abs(deltaY.current) > threshold) {
