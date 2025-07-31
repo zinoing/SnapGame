@@ -23,18 +23,6 @@ function LoginPanel({ onClose }) {
           <option>English</option>
           <option>Korean</option>
         </select>
-
-        <div className="footer-links">
-          Company Info · Developer Page · Kids Site · Careers<br />
-          Terms of Use · Privacy Policy · All Games
-        </div>
-
-        <div className="social-icons">
-          <span>🎵</span>
-          <span>💬</span>
-          <span>💼</span>
-          <span>▶</span>
-        </div>
       </div>
     </div>
   );

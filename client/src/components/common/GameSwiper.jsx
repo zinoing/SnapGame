@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import InteractionIcons from "./InteractionIcons";
 import "./GameSwiper.css";
+import { getCurrentGame } from "../../hooks/useGameOrder";
 
-export default function GameSwiper({ gameState, onSwipe }) {
+export default function GameSwiper({ gameState, onSwipe, setStep, setMemoizedGame }) {
   const containerRef = useRef(null);
   const slotRefs = useRef([React.createRef(), React.createRef(), React.createRef()]);
 
@@ -113,7 +114,15 @@ export default function GameSwiper({ gameState, onSwipe }) {
           style={{ backgroundImage: `url(${game.thumbnail_url})` }}
         >
           <div className="game-info">
-            <button id="play-button">▶ Play</button>
+            <button 
+              id="play-button"
+              onClick={() => {
+                setMemoizedGame(getCurrentGame());
+                setStep("play");
+              }}
+            >
+              ▶ Play
+            </button>
             <InteractionIcons
               userId={window.USER_CONFIG?.USER_ID}
               gameId={game.id}

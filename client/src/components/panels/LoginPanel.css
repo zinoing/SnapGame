@@ -91,18 +91,3 @@
   border: none;
   border-radius: 8px;
 }
-
-.footer-links {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 16px;
-  line-height: 1.4;
-}
-
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 12px;
-  font-size: 20px;
-}

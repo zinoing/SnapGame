@@ -9,7 +9,6 @@ import {
   loadPreviousGame,
 } from "../hooks/useGameOrder";
 import GameContainer from "../components/game/GameContainer";
-import InteractionIcons from "../components/common/InteractionIcons";
 import TopBanner from "../components/banners/TopBanner";
 import MyPanel from "../components/panels/MyPanel";
 import InGameTopBanner from "../components/banners/InGameTopBanner";
@@ -75,6 +74,8 @@ function GameFeedPage() {
           <GameSwiper
             gameState={gameState}
             onSwipe={handleSwipe}
+            setStep={setStep}
+            setMemoizedGame={setMemoizedGame}
           />
         </>
       )}
